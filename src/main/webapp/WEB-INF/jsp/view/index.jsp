@@ -4,16 +4,16 @@
         <title>Categories</title>
     </head>
     <body>
-        <c:if test="${pageContext.request.userPrincipal.name == null}">
-            <a href="<c:url value="/login" />">Login</a><br /><br />  
-        </c:if>
-        <c:if test="${pageContext.request.userPrincipal.name != null}">
-            <c:url var="logoutUrl" value="/logout"/>
+      <security:authorize access="isAuthenticated()">
+           <c:url var="logoutUrl" value="/logout"/>
             <form action="${logoutUrl}" method="post">
                 <input type="submit" value="Log out" />
                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
             </form>
-        </c:if>
+      </security:authorize>
+      <security:authorize access="isAnonymous()">
+          <a href="<c:url value="/login" />">Login</a><br /><br />  
+      </security:authorize>
       
         <h2>Categories</h2>
         <ul>
