@@ -18,8 +18,9 @@ public class IndexController {
         return "login";
     }
     
-    @RequestMapping("register")
-    public String register() {
-        return "register";
+    @RequestMapping("create")
+    public String addUser() {
+        return "addUser";
     }
 }
+
