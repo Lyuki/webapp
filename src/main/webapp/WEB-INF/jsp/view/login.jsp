@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Customer Support Login</title>
+        <title>Course Discussion Forum Login</title>
     </head>
     <body>
         <c:if test="${param.error != null}">
@@ -10,7 +10,7 @@
         <c:if test="${param.logout != null}">
             <p>You have logged out.</p>
         </c:if>
-        <h2>Customer Support Login</h2>
+        <h2>Course Discussion Forum Login</h2>
         <form action="login" method="POST">
             <label for="username">Username:</label><br/>
             <input type="text" id="username" name="username" /><br/><br/>
@@ -20,7 +20,7 @@
             <label for="remember-me">Remember me</label><br/><br/>
             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
             <input type="submit" value="Log In"/><br/>
-            <a href="<c:url value="/register" />">Register</a>
+            <a href="<c:url value="/user/create" />">Register</a>
         </form>
     </body>
 </html>
