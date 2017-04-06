@@ -2,10 +2,9 @@ package com.mycompany.webapp.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.view.RedirectView;
-import com.mycompany.webapp.model.Topics;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.servlet.View;
 
 @Controller
 public class IndexController {
@@ -26,29 +25,28 @@ public class IndexController {
     }
     
     @RequestMapping("Lecture")
-    public String Lecturetopics() {
+    public View Lecturetopics() {
         ModelMap model = new ModelMap();
         model.addAttribute("cate", "Lecture");
-        //topic.setCategory("Lecture");
-        return "topic";
+        return new RedirectView("/topic", true);
     }
     
     @RequestMapping("Lab")
-    public String Labtopics() {
+    public View Labtopics() {
         //Topics topic = new Topics();
         //topic.setCategory("Lab");
         ModelMap model = new ModelMap();
         model.addAttribute("cate", "Lab");
-        return "topic";
+        return new RedirectView("/topic", true);
     }
     
     @RequestMapping("Other")
-    public String Othertopics() {
+    public View Othertopics() {
         //Topics topic = new Topics();
         //topic.setCategory("Other");
         ModelMap model = new ModelMap();
         model.addAttribute("cate", "Other");
-        return "topic";
+        return new RedirectView("/topic", true);
     }
 }
 
