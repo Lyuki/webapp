@@ -26,7 +26,7 @@ public class TopicController {
     private Map<Long, Topics> topicDatabase = new LinkedHashMap<>();
 
     @RequestMapping(value = {"", "topic"}, method = RequestMethod.GET)
-    public String list(ModelMap model) {
+    public String topic(ModelMap model) {
         model.addAttribute("topicDatabase", topicDatabase);
         return "topic";
     }
