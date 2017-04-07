@@ -26,14 +26,14 @@
             <c:otherwise>
                 <c:forEach items="${topicDatabase}" var="entry">
                     <ul>
-                    <li><a href="<c:url value="/topic/reply/${entry.key}" />">
-                        <c:out value="${entry.value.title}" /></a>
-                    (<c:out value="${entry.value.customerName}" /> reply)
-                    <security:authorize access="hasRole('ADMIN') or principal.username=='${entry.value.customerName}'">            
-                        [<a href="<c:url value="/topic/edit/${entry.key}" />">Edit</a>]
+                    <li><a href="<c:url value="/topic/reply/${entry.id}" />">
+                        <c:out value="${entry.title}" /></a>
+                    (<c:out value="${entry.customerName}" /> reply)
+                    <security:authorize access="hasRole('ADMIN') or principal.username=='${entry.customerName}'">            
+                        [<a href="<c:url value="/topic/edit/${entry.id}" />">Edit</a>]
                     </security:authorize>
                     <security:authorize access="hasRole('ADMIN')">            
-                        [<a href="<c:url value="/topic/delete/${entry.key}" />">Delete</a>]
+                        [<a href="<c:url value="/topic/delete/${entry.id}" />">Delete</a>]
                     </security:authorize>           
                     <br />
                     </li>
@@ -41,7 +41,8 @@
                 </c:forEach>
             </c:otherwise>
         </c:choose>
-        
+                <br/><br/>
+        <a href="<c:url value="/" />">Return to index page</a>
       
     </body>
 </html>
