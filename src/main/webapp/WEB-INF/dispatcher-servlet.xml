@@ -23,4 +23,5 @@
     
     
   <bean id="gbEntryRepo" class="com.mycompany.webapp.dao.UserRepositoryImpl" />
+  <bean id="gbEntryRepo1" class="com.mycompany.webapp.dao.TopicRepositoryImpl" />
 </beans>
