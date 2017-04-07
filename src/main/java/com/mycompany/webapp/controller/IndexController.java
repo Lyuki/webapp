@@ -23,6 +23,11 @@ public class IndexController {
     public String addUser() {
         return "addUser";
     }
+   
+   @RequestMapping("createPoll")
+    public String createPoll() {
+        return "createPoll";
+    }
     
     @RequestMapping("Lecture")
     public View Lecturetopics() {
