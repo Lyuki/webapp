@@ -22,5 +22,7 @@
             <input type="submit" value="Log In"/><br/>
             <a href="<c:url value="/user/create" />">Register</a>
         </form>
+        <br/><br/>
+        <a href="<c:url value="/" />">Return to index page</a>
     </body>
 </html>
