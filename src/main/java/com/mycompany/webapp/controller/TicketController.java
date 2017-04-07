@@ -21,6 +21,7 @@ import org.springframework.web.servlet.view.RedirectView;
 @Controller
 @RequestMapping("ticket")
 public class TicketController {
+   
 
     private volatile long TICKET_ID_SEQUENCE = 1;
     private Map<Long, Ticket> ticketDatabase = new LinkedHashMap<>();
@@ -188,4 +189,8 @@ public class TicketController {
         return new RedirectView("/ticket/list", true);
     }
 
+    @RequestMapping("/")
+    public String index() {
+        return "index";
+    }
 }
