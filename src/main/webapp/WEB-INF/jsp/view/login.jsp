@@ -5,7 +5,7 @@
     </head>
     <body>
         <c:if test="${param.error != null}">
-            <p>Login failed.</p>
+            <p>Login failed. The username and password you entered are not correct. Please try again.</p>
         </c:if>
         <c:if test="${param.logout != null}">
             <p>You have logged out.</p>
