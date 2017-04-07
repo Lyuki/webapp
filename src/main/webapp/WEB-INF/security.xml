@@ -21,6 +21,10 @@
     <b:bean id="userRepo" class="com.mycompany.webapp.dao.UserRepositoryImpl"/>   
 
     <b:bean id="userService" class="com.mycompany.webapp.dao.UserService" />
+         
+    <b:bean id="pollRepo" class="com.mycompany.webapp.dao.PollRepositoryImpl"/>   
+
+    <!--<b:bean id="pollService" class="com.mycompany.webapp.dao.PollService" />-->
 
     <!--<b:bean id="bCryptPasswordEncoder"
         class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />-->
