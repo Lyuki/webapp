@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Categories</title>
+        <title>Course Discussion Forum</title>
     </head>
     <body>
         <security:authorize access="isAuthenticated()">
@@ -13,6 +13,10 @@
         </security:authorize>
         <security:authorize access="isAnonymous()">
             <a href="<c:url value="/login" />">Login</a><br /><br />  
+        </security:authorize>
+            <br />
+        <security:authorize access="hasRole('ADMIN')">
+          <a href="<c:url value="/user/list" />">Manage User Account</a><br /><br />  
         </security:authorize>
       
         <h2>Categories</h2>
