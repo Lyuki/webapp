@@ -26,7 +26,9 @@
             <li><a href="<c:url value="/Other" />">Other</a><br /><br /></li>
         </ul>
         
-        
+        <security:authorize access="hasRole('ADMIN')">
+          <a href="<c:url value="/createPoll" />">Create Poll</a><br /><br />
+        </security:authorize>
         
         <security:authorize access="isAuthenticated()">
           <h2>Poll:</h2>
