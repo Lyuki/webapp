@@ -1,5 +1,6 @@
 package com.mycompany.webapp.controller;
 
+import com.mycompany.webapp.dao.TopicRepository;
 import com.mycompany.webapp.model.Attachment;
 import com.mycompany.webapp.model.Topics;
 import com.mycompany.webapp.view.DownloadingView;
@@ -8,6 +9,7 @@ import java.security.Principal;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,22 +23,26 @@ import org.springframework.web.servlet.view.RedirectView;
 @Controller
 @RequestMapping("topic")
 public class TopicController {
+     @Autowired
+    TopicRepository topicRepo;
 
     private volatile long TOPIC_ID_SEQUENCE = 1;
     private Map<Long, Topics> topicDatabase = new LinkedHashMap<>();
 
     @RequestMapping(value = {"", "topic"}, method = RequestMethod.GET)
     public String topic(ModelMap model) {
-        model.addAttribute("topicDatabase", topicDatabase);
+        //model.addAttribute("topicDatabase", topicDatabase);
+        model.addAttribute("topicDatabase", topicRepo.findAll());
         return "topic";
     }
 
     @RequestMapping(value = "reply/{topicId}", method = RequestMethod.GET)
     public ModelAndView view(@PathVariable("topicId") long topicId) {
-        Topics topic = this.topicDatabase.get(topicId);
+        //Topics topic = this.topicDatabase.get(topicId);
+        Topics topic = topicRepo.findByID(topicId);
         if (topic == null) {
             return new ModelAndView(new RedirectView("/topic", true));
-        }
+        }  
         ModelAndView modelAndView = new ModelAndView("reply");
         modelAndView.addObject("topicId", Long.toString(topicId));
         modelAndView.addObject("topic", topic);
@@ -109,6 +115,7 @@ public class TopicController {
         }
         
         this.topicDatabase.put(topic.getId(), topic);
+        topicRepo.create(topic);
         //return new RedirectView("/topic/" + topic.getId(), true);
         return new RedirectView("/topic", true);
     }
@@ -152,7 +159,7 @@ public class TopicController {
 
     @RequestMapping(value = "edit/{topicId}", method = RequestMethod.GET)
     public ModelAndView showEdit(@PathVariable("topicId") long topicId, Principal principal) {
-        Topics topic = this.topicDatabase.get(topicId);
+        Topics topic = topicRepo.findByID(topicId);
         if (topic == null || !principal.getName().equals(topic.getCustomerName())) {
             return new ModelAndView(new RedirectView("/topic/reply", true));
         }
@@ -172,7 +179,7 @@ public class TopicController {
     @RequestMapping(value = "edit/{topicId}", method = RequestMethod.POST)
     public View edit(@PathVariable("topicId") long topicId, Form form, Principal principal)
             throws IOException {
-        Topics topic = this.topicDatabase.get(topicId);
+        Topics topic = topicRepo.findByID(topicId);
         if (topic == null || !principal.getName().equals(topic.getCustomerName())) {
             return new RedirectView("/topic/reply", true);
         }
@@ -190,15 +197,13 @@ public class TopicController {
             }
         }
 
-        this.topicDatabase.put(topic.getId(), topic);
+        topicRepo.editByID(topic);
         return new RedirectView("/topic/reply/" + topic.getId(), true);
     }
 
     @RequestMapping(value = "delete/{topicId}", method = RequestMethod.GET)
     public View deleteTopic(@PathVariable("topicId") long topicId) {
-        if (this.topicDatabase.containsKey(topicId)) {
-            this.topicDatabase.remove(topicId);
-        }
+        topicRepo.deleteByID(topicId);
         return new RedirectView("/topic", true);
     }
 
