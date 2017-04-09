@@ -26,7 +26,7 @@ public class IndexController {
    
    @RequestMapping("createPoll")
     public String createPoll() {
-        return "createPoll";
+        return "newPoll";
     }
     
     @RequestMapping("Lecture")
