@@ -11,9 +11,6 @@
         </form>
 
         <h2>Topic #${topicId}: <c:out value="${topic.title}" /></h2>
-        <security:authorize access="hasRole('ADMIN') or principal.username=='${topic.customerName}'">            
-            [<a href="<c:url value="/topic/edit/${topicId}" />">Edit</a>]
-        </security:authorize>
         <security:authorize access="hasRole('ADMIN')">            
             [<a href="<c:url value="/topic/delete/${topicId}" />">Delete</a>]
         </security:authorize>
