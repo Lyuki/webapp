@@ -29,9 +29,6 @@
                     <li><a href="<c:url value="/topic/reply/${entry.id}" />">
                         <c:out value="${entry.title}" /></a>
                     (<c:out value="${entry.customerName}" /> reply)
-                    <security:authorize access="hasRole('ADMIN') or principal.username=='${entry.customerName}'">            
-                        [<a href="<c:url value="/topic/edit/${entry.id}" />">Edit</a>]
-                    </security:authorize>
                     <security:authorize access="hasRole('ADMIN')">            
                         [<a href="<c:url value="/topic/delete/${entry.id}" />">Delete</a>]
                     </security:authorize>           
