@@ -40,13 +40,12 @@ public class UserRepositoryImpl implements UserRepository {
             = "insert into users (username, password) values (?, ?)";
     private static final String SQL_INSERT_ROLE
             = "insert into user_roles (username, role) values (?, ?)";
-
     @Override
     public void create(AllUser user) {
         jdbcOp.update(SQL_INSERT_USER,
                 user.getUsername(),
                 user.getPassword());
-
+        
         for (String role : user.getRoles()) {
             jdbcOp.update(SQL_INSERT_ROLE,
                     user.getUsername(),
