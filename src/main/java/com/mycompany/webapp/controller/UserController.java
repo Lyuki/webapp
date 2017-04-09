@@ -22,7 +22,7 @@ public class UserController {
 
     //@Autowired
     //private PasswordEncoder passwordEncoder;
-    @RequestMapping(value = {"","list"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"", "list"}, method = RequestMethod.GET)
     public String list(ModelMap model) {
         model.addAttribute("allUsers", userRepo.findAll());
         return "listUser";
@@ -74,11 +74,8 @@ public class UserController {
         for (String role : form.getRoles()) {
             user.addRole(role);
         }
-        if(userRepo.findByUsername(form.getUsername()) == null){
-          userRepo.create(user);
-        }
-        
-        return new RedirectView("/", true);
+        userRepo.create(user);
+        return new RedirectView("/user/list", true);
     }
 
     @RequestMapping(value = "delete/{username}", method = RequestMethod.GET)
