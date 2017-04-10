@@ -41,27 +41,17 @@ public class IndexController {
     
     @RequestMapping("Lecture")
     public View Lecturetopics() {
-        ModelMap model = new ModelMap();
-        model.addAttribute("cate", "Lecture");
-        return new RedirectView("/topic", true);
+        return new RedirectView("/topic/Lecture", true);
     }
     
     @RequestMapping("Lab")
     public View Labtopics() {
-        //Topics topic = new Topics();
-        //topic.setCategory("Lab");
-        ModelMap model = new ModelMap();
-        model.addAttribute("cate", "Lab");
-        return new RedirectView("/topic", true);
+        return new RedirectView("/topic/Lab", true);
     }
     
     @RequestMapping("Other")
     public View Othertopics() {
-        //Topics topic = new Topics();
-        //topic.setCategory("Other");
-        ModelMap model = new ModelMap();
-        model.addAttribute("cate", "Other");
-        return new RedirectView("/topic", true);
+        return new RedirectView("/topic/Other", true);
     }
 }
 
