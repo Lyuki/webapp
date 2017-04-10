@@ -31,15 +31,17 @@
         </security:authorize>
         
         <security:authorize access="isAuthenticated()">
-          <h2>Poll:</h2>
-          <form action="checkboxes" method="POST">
-            Select the fruits you like to eat: <br/>
-            <input type="radio" name="fruit" value="ans1"/> 1 <br/>
-            <input type="radio" name="fruit" value="ans2"/> 2 <br/>
-            <input type="radio" name="fruit" value="ans3"/> 3 <br/>
-            <input type="radio" name="fruit" value="ans4"/> 4 <br/>
-            <br/><input type="submit" value="Submit"/>
-          </form>
+            <h2>Poll:</h2>
+            <form action="checkboxes" method="POST">       
+                <c:forEach items="${poll}" var="poll">
+                <c:out value="${poll.question}"/><br/>
+                <input type="radio" name="ans" value="ans1"/><c:out value="${poll.ans1}"/><br/>
+                <input type="radio" name="ans" value="ans2"/><c:out value="${poll.ans2}"/><br/>
+                <input type="radio" name="ans" value="ans3"/><c:out value="${poll.ans3}"/><br/>
+                <input type="radio" name="ans" value="ans4"/><c:out value="${poll.ans4}"/><br/>
+                <br/><input type="submit" value="Submit"/>
+                </c:forEach>
+            </form>
         </security:authorize>
 
         <h2>Poll Result:</h2>
