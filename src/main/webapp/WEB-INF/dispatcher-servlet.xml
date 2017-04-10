@@ -26,4 +26,5 @@
   <bean id="gbEntryRepo1" class="com.mycompany.webapp.dao.TopicRepositoryImpl" />
   <bean id="gbEntryRepo2" class="com.mycompany.webapp.dao.PollRepositoryImpl" />
   <bean id="gbEntryRepo3" class="com.mycompany.webapp.dao.ReplyRepositoryImpl" />
+  <bean id="gbEntryRepo4" class="com.mycompany.webapp.dao.VoteRepositoryImpl" />
 </beans>
