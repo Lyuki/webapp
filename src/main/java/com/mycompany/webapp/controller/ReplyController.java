@@ -34,25 +34,27 @@ public class ReplyController {
     @RequestMapping(value = {"", "replys"}, method = RequestMethod.GET)
     public String topic(ModelMap model) {
         //model.addAttribute("topicDatabase", topicDatabase);
-        model.addAttribute("replyDatabase", replyRepo.findAll());
+        model.addAttribute("replyDatabase", replyRepo.findAll(0));
         return "topic";
     }
 
-    @RequestMapping(value = {"view/{topicId}"}, method = RequestMethod.GET)
-    public ModelAndView reply(ModelMap model, @PathVariable("topicId") long topicId) {
+    @RequestMapping(value = {"view/{topicId}/{cate}"}, method = RequestMethod.GET)
+    public ModelAndView reply(ModelMap model, @PathVariable("topicId") long topicId, @PathVariable("cate") String cate) {
         model.addAttribute("topicId", topicId);
-        model.addAttribute("replyDatabase", replyRepo.findAll());
+        model.addAttribute("cate", cate);
+        model.addAttribute("replyDatabase", replyRepo.findAll(topicId));
         return new ModelAndView("/viewReply");
     }
 
-    @RequestMapping(value = "create/{topicId}", method = RequestMethod.GET)
-    public ModelAndView createReply(@PathVariable("topicId") long topicId) {
+    @RequestMapping(value = "create/{topicId}/{cate}", method = RequestMethod.GET)
+    public ModelAndView createReply(@PathVariable("topicId") long topicId, @PathVariable("cate") String cate) {
         /*ModelAndView modelAndView = new ModelAndView("createReply", "replyForm", new Form());
          modelAndView.addObject("tId", topicId);
          return modelAndView;*/
 
         ModelAndView modelAndView = new ModelAndView("createReply");
         modelAndView.addObject("topicId", Long.toString(topicId));
+        modelAndView.addObject("cate", cate);
 
         Form replyForm = new Form();
         modelAndView.addObject("replyForm", replyForm);
@@ -92,7 +94,7 @@ public class ReplyController {
         }
     }
 
-    @RequestMapping(value = "create/{topicId}", method = RequestMethod.POST)
+    @RequestMapping(value = "create/{topicId}/{cate}", method = RequestMethod.POST)
     public View create(Form form, Principal principal) throws IOException {
         Reply reply = new Reply();
         reply.setId(this.getNextReplyId());
@@ -114,7 +116,7 @@ public class ReplyController {
         this.replyDatabase.put(reply.getId(), reply);
         replyRepo.create(reply);
         //return new RedirectView("/topic/" + topic.getId(), true);
-        return new RedirectView("/replys/view/" + form.getTopicId(), true);
+        return new RedirectView("/replys/view/" + form.getTopicId() + "/{cate}", true);
     }
 
     private synchronized long getNextReplyId() {
@@ -135,7 +137,7 @@ public class ReplyController {
                         attachment.getMimeContentType(), attachment.getContents());
             }
         }
-        return new RedirectView("/topic", true);
+        return new RedirectView("/index", true);
     }
 
     @RequestMapping(
@@ -156,7 +158,7 @@ public class ReplyController {
     @RequestMapping(value = "delete/{replyId}", method = RequestMethod.GET)
     public View deleteReply(@PathVariable("replyId") long topicId) {
         replyRepo.deleteByID(topicId);
-        return new RedirectView("/topic", true);
+        return new RedirectView("/index", true);
     }
 
 }

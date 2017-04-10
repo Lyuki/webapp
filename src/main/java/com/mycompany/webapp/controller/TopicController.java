@@ -170,7 +170,7 @@ public class TopicController {
                 topic.deleteAttachment(name);
             }
         }
-        return new RedirectView("/topic/edit/" + topicId, true);
+        return new RedirectView("/index", true);
     }
 
     @RequestMapping(value = "edit/{topicId}", method = RequestMethod.GET)
@@ -214,12 +214,12 @@ public class TopicController {
         }
 
         topicRepo.editByID(topic);
-        return new RedirectView("/topic/reply/" + topic.getId(), true);
+        return new RedirectView("/index" + topic.getId(), true);
     }
 
     @RequestMapping(value = "delete/{topicId}", method = RequestMethod.GET)
     public View deleteTopic(@PathVariable("topicId") long topicId) {
         topicRepo.deleteByID(topicId);
-        return new RedirectView("/topic", true);
+        return new RedirectView("/index", true);
     }
 }
