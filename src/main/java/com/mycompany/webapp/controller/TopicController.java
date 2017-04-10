@@ -1,7 +1,9 @@
 package com.mycompany.webapp.controller;
 
+import com.mycompany.webapp.dao.ReplyRepository;
 import com.mycompany.webapp.dao.TopicRepository;
 import com.mycompany.webapp.model.Attachment;
+import com.mycompany.webapp.model.Reply;
 import com.mycompany.webapp.model.Topics;
 import com.mycompany.webapp.view.DownloadingView;
 import java.io.IOException;
@@ -23,7 +25,8 @@ import org.springframework.web.servlet.view.RedirectView;
 @Controller
 @RequestMapping("topic")
 public class TopicController {
-     @Autowired
+
+    @Autowired
     TopicRepository topicRepo;
 
     private volatile long TOPIC_ID_SEQUENCE = 1;
@@ -42,7 +45,7 @@ public class TopicController {
         Topics topic = topicRepo.findByID(topicId);
         if (topic == null) {
             return new ModelAndView(new RedirectView("/topic", true));
-        }  
+        }
         ModelAndView modelAndView = new ModelAndView("reply");
         modelAndView.addObject("topicId", Long.toString(topicId));
         modelAndView.addObject("topic", topic);
@@ -102,7 +105,7 @@ public class TopicController {
         topic.setTitle(form.getTitle());
         topic.setMsg(form.getMsg());
         topic.setCategory(form.getCategory());
-        
+
         for (MultipartFile filePart : form.getAttachments()) {
             Attachment attachment = new Attachment();
             attachment.setName(filePart.getOriginalFilename());
@@ -113,7 +116,7 @@ public class TopicController {
                 topic.addAttachment(attachment);
             }
         }
-        
+
         this.topicDatabase.put(topic.getId(), topic);
         topicRepo.create(topic);
         //return new RedirectView("/topic/" + topic.getId(), true);
@@ -155,7 +158,6 @@ public class TopicController {
         }
         return new RedirectView("/topic/edit/" + topicId, true);
     }
-    
 
     @RequestMapping(value = "edit/{topicId}", method = RequestMethod.GET)
     public ModelAndView showEdit(@PathVariable("topicId") long topicId, Principal principal) {
@@ -185,7 +187,7 @@ public class TopicController {
         }
         topic.setMsg(form.getMsg());
         topic.setTitle(form.getTitle());
-        
+
         for (MultipartFile filePart : form.getAttachments()) {
             Attachment attachment = new Attachment();
             attachment.setName(filePart.getOriginalFilename());
@@ -206,5 +208,4 @@ public class TopicController {
         topicRepo.deleteByID(topicId);
         return new RedirectView("/topic", true);
     }
-
 }
