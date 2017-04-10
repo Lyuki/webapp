@@ -9,9 +9,14 @@ import org.springframework.web.servlet.View;
 @Controller
 public class IndexController {
 
-   @RequestMapping("/")
-    public String index() {
-        return "index";
+   @Autowired
+    PollRepository pollRepo;
+    Poll poll = new Poll();
+
+    @RequestMapping("/")
+    public ModelAndView index(Map<String, Object> model) {
+        model.put("poll", pollRepo.findAll());
+        return new ModelAndView("index");
     }
     
     @RequestMapping("login")
