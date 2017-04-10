@@ -42,7 +42,7 @@ CREATE TABLE poll (
     ans1 VARCHAR(100),
     ans2 VARCHAR(100),
     ans3 VARCHAR(100),
-    ans4 VARCHAR(100),
+    ans4 VARCHAR(100)
 );
 
 CREATE TABLE vote (
