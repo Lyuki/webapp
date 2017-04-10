@@ -23,6 +23,8 @@
     <b:bean id="userService" class="com.mycompany.webapp.dao.UserService" />
          
     <b:bean id="pollRepo" class="com.mycompany.webapp.dao.PollRepositoryImpl"/>
+         
+    <b:bean id="voteRepo" class="com.mycompany.webapp.dao.VoteRepositoryImpl"/>
 
     <!--<b:bean id="pollService" class="com.mycompany.webapp.dao.PollService" />-->
 
