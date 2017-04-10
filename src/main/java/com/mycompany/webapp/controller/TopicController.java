@@ -35,26 +35,40 @@ public class TopicController {
     @RequestMapping(value = {"", "topic"}, method = RequestMethod.GET)
     public String topic(ModelMap model) {
         //model.addAttribute("topicDatabase", topicDatabase);
-        model.addAttribute("topicDatabase", topicRepo.findAll());
+        model.addAttribute("topicDatabase", topicRepo.findAll(""));
         return "topic";
     }
+    
+    @RequestMapping(value = "{cate}", method = RequestMethod.GET)
+    public ModelAndView catetopic(ModelMap model,@PathVariable("cate") String cate) {
+        model.addAttribute("cate", cate);
+        model.addAttribute("topicDatabase", topicRepo.findAll(cate));
+        return new ModelAndView("/topic");
+    }
 
-    @RequestMapping(value = "reply/{topicId}", method = RequestMethod.GET)
-    public ModelAndView view(@PathVariable("topicId") long topicId) {
+    @RequestMapping(value = "reply/{cate}/{topicId}", method = RequestMethod.GET)
+    public ModelAndView view(@PathVariable("topicId") long topicId, @PathVariable("cate") String cate) {
         //Topics topic = this.topicDatabase.get(topicId);
         Topics topic = topicRepo.findByID(topicId);
         if (topic == null) {
-            return new ModelAndView(new RedirectView("/topic", true));
+            return new ModelAndView(new RedirectView("/topic/{cate}", true));
         }
         ModelAndView modelAndView = new ModelAndView("reply");
         modelAndView.addObject("topicId", Long.toString(topicId));
+        modelAndView.addObject("cate", cate);
         modelAndView.addObject("topic", topic);
         return modelAndView;
     }
 
-    @RequestMapping(value = "create", method = RequestMethod.GET)
-    public ModelAndView create() {
-        return new ModelAndView("newTopic", "topicForm", new Form());
+    @RequestMapping(value = "create/{cate}", method = RequestMethod.GET)
+    public ModelAndView create(@PathVariable("cate") String cate) {       
+        ModelAndView modelAndView = new ModelAndView("newTopic");
+        modelAndView.addObject("cate", cate);
+
+        Form replyForm = new Form();
+        modelAndView.addObject("topicForm", replyForm);
+
+        return modelAndView;
     }
 
     public static class Form {
@@ -97,7 +111,7 @@ public class TopicController {
         }
     }
 
-    @RequestMapping(value = "create", method = RequestMethod.POST)
+    @RequestMapping(value = "create/{cate}", method = RequestMethod.POST)
     public View create(Form form, Principal principal) throws IOException {
         Topics topic = new Topics();
         topic.setId(this.getNextTopicId());
@@ -120,7 +134,7 @@ public class TopicController {
         this.topicDatabase.put(topic.getId(), topic);
         topicRepo.create(topic);
         //return new RedirectView("/topic/" + topic.getId(), true);
-        return new RedirectView("/topic", true);
+        return new RedirectView("/topic/{cate}", true);
     }
 
     private synchronized long getNextTopicId() {
@@ -141,7 +155,7 @@ public class TopicController {
                         attachment.getMimeContentType(), attachment.getContents());
             }
         }
-        return new RedirectView("/topic", true);
+        return new RedirectView("/index", true);
     }
 
     @RequestMapping(
