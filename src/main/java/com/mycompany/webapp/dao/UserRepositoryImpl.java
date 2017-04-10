@@ -40,12 +40,13 @@ public class UserRepositoryImpl implements UserRepository {
             = "insert into users (username, password) values (?, ?)";
     private static final String SQL_INSERT_ROLE
             = "insert into user_roles (username, role) values (?, ?)";
+
     @Override
     public void create(AllUser user) {
         jdbcOp.update(SQL_INSERT_USER,
                 user.getUsername(),
                 user.getPassword());
-        
+
         for (String role : user.getRoles()) {
             jdbcOp.update(SQL_INSERT_ROLE,
                     user.getUsername(),
@@ -77,20 +78,37 @@ public class UserRepositoryImpl implements UserRepository {
         return users;
     }
 
-    private static final String SQL_SELECT_USER
+   private static final String SQL_SELECT_USER
             = "select username, password from users where username = ?";
 
     @Override
     public AllUser findByUsername(String username) {
-        AllUser user = jdbcOp.queryForObject(SQL_SELECT_USER,
-                new UserRowMapper(), username);
-        List<Map<String, Object>> rows = jdbcOp.queryForList(SQL_SELECT_ROLES,
+        AllUser ticketUser = jdbcOp.queryForObject(SQL_SELECT_USER, new UserRowMapper(), username);
+        List<Map<String, Object>> rows = jdbcOp.queryForList(SQL_SELECT_ROLES, username);
+        for (Map<String, Object> row : rows) {
+            ticketUser.addRole((String) row.get("role"));
+        }
+        return ticketUser;
+    }
+
+    private static final String SQL_EDIT_USER
+            = "update users set password = ? where username = ?";
+    private static final String SQL_EDIT_ROLE
+            = "update user_roles set role = ? where username = ?";
+ 
+    @Override
+    public void editUser(String username) {
+        AllUser user = new AllUser();
+        jdbcOp.update(SQL_EDIT_USER,
+                user.getPassword(),
                 username);
 
-        for (Map<String, Object> row : rows) {
-            user.addRole((String) row.get("role"));
+        for (String role : user.getRoles()) {
+            jdbcOp.update(SQL_EDIT_ROLE,
+                    role,
+                    username);
         }
-        return user;
+            
     }
 
     private static final String SQL_DELETE_USER
