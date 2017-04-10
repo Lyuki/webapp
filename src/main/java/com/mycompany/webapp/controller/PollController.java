@@ -1,14 +1,15 @@
 package com.mycompany.webapp.controller;
 
 import com.mycompany.webapp.dao.PollRepository;
+import com.mycompany.webapp.dao.VoteRepository;
 import com.mycompany.webapp.model.Poll;
+import com.mycompany.webapp.model.Vote;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -20,7 +21,7 @@ public class PollController {
     @Autowired
      PollRepository pollRepo;
 
-    private volatile long TOPIC_ID_SEQUENCE = 1;
+    private volatile long POLL_ID_SEQUENCE = 1;
     private Map<Long, Poll> pollDatabase = new LinkedHashMap<>();
     
     /*@RequestMapping(value = {"", "createPoll"}, method = RequestMethod.GET)
@@ -102,6 +103,66 @@ public class PollController {
     }
     
     private synchronized long getNextPollId() {
-        return this.TOPIC_ID_SEQUENCE++;
+        return this.POLL_ID_SEQUENCE++;
     }
+    
+    @Autowired
+    VoteRepository voteRepo;
+    
+    private volatile long VOTE_ID_SEQUENCE = 1;
+    private Map<Long, Vote> voteDatabase = new LinkedHashMap<>();
+    
+    @RequestMapping(value = "index", method = RequestMethod.GET)
+        public ModelAndView createVote() {
+        return new ModelAndView("index", "voteForm", new voteForm());
+    }
+        
+    public static class voteForm {
+        private long pollId;
+        private String customerName;
+        private long ansId;
+
+        public long getPollId() {
+            return pollId;
+        }
+
+        public void setPollId(long pollId) {
+            this.pollId = pollId;
+        }
+
+        public String getCustomerName() {
+            return customerName;
+        }
+
+        public void setCustomerName(String customerName) {
+            this.customerName = customerName;
+        }
+
+        public long getAnsId() {
+            return ansId;
+        }
+
+        public void setAnsId(long ansId) {
+            this.ansId = ansId;
+        }
+    }
+    
+    @RequestMapping(value = "index", method = RequestMethod.POST)
+    public View createVote(voteForm vform, Principal principal) throws IOException {
+        Vote vote = new Vote();
+        vote.setId(this.getNextVoteId());
+        vote.setPollId(vform.getPollId());
+        vote.setCustomerName(principal.getName());
+        vote.setAnsId(vform.getAnsId());
+        
+        this.voteDatabase.put(vote.getId(), vote);
+        voteRepo.create(vote);
+        //return new RedirectView("/topic/" + topic.getId(), true);
+        return new RedirectView("/", true);
+    }
+    
+    private synchronized long getNextVoteId() {
+        return this.VOTE_ID_SEQUENCE++;
+    }
+    
 }
