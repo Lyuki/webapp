@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Topics</title>
+        <title><c:out value="${cate}" />Topics</title>
     </head>
     <body>
         <security:authorize access="isAuthenticated()">
@@ -17,7 +17,7 @@
       
         <h2>Topics</h2>
         <security:authorize access="isAuthenticated()">
-             <a href="<c:url value="/topic/create" />">New Topic</a><br /><br /> 
+             <a href="<c:url value="/topic/create/${cate}" />">New Topic</a><br /><br /> 
         </security:authorize>
         <c:choose>
             <c:when test="${fn:length(topicDatabase) == 0}">
@@ -26,7 +26,7 @@
             <c:otherwise>
                 <c:forEach items="${topicDatabase}" var="entry">
                     <ul>
-                    <li><a href="<c:url value="/topic/reply/${entry.id}" />">
+                    <li><a href="<c:url value="/topic/reply/${cate}/${entry.id}" />">
                         <c:out value="${entry.title}" /></a>
                     (<c:out value="${entry.customerName}" /> reply)
                     <security:authorize access="hasRole('ADMIN')">            
