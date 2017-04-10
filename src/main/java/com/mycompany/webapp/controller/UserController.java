@@ -3,6 +3,7 @@ package com.mycompany.webapp.controller;
 import com.mycompany.webapp.dao.UserRepository;
 import com.mycompany.webapp.model.AllUser;
 import java.io.IOException;
+import java.security.Principal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -75,6 +76,41 @@ public class UserController {
             user.addRole(role);
         }
         userRepo.create(user);
+        return new RedirectView("/user/list", true);
+    }
+
+    @RequestMapping(value = "edit/{username}", method = RequestMethod.GET)
+    public ModelAndView edit(@PathVariable("username") String username, Principal principal) {
+        AllUser user = userRepo.findByUsername(username);
+        if (user == null || !principal.getName().equals(user.getUsername())) {
+            return new ModelAndView(new RedirectView("/user/list", true));
+        }
+
+        ModelAndView modelAndView = new ModelAndView("editUser");
+        modelAndView.addObject("username", username);
+        //modelAndView.addObject("username", user);
+
+        Form editForm = new Form();
+        modelAndView.addObject("edituser", editForm);
+
+        return modelAndView;
+    }
+
+
+    @RequestMapping(value = "edit/{username}", method = RequestMethod.POST)
+    public View edit(@PathVariable("username") String username, Form form, Principal principal)
+            throws IOException {
+        AllUser user = userRepo.findByUsername(username);
+        if (user == null || !principal.getName().equals(user.getUsername())) {
+            return new RedirectView("/user/list", true);
+        }
+
+        user.setPassword(form.getPassword());
+        //user.setPassword(passwordEncoder.encode(form.getPassword()));
+        for (String role : form.getRoles()) {
+            user.addRole(role);
+        }
+        userRepo.editUser(username);
         return new RedirectView("/user/list", true);
     }
 
