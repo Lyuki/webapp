@@ -104,9 +104,9 @@ public class TopicRepositoryImpl implements TopicRepository {
     }
 
     private static final String SQL_DELETE_TOPIC
-            = "delete from users where username = ?";
+            = "delete from topic where id = ?";
     private static final String SQL_DELETE_ATTACH
-            = "delete from user_roles where username = ?";
+            = "delete from attachment where topic_id = ?";
 
     @Override
     public void deleteByID(long id) {
