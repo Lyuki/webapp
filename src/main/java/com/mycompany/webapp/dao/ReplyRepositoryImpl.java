@@ -58,14 +58,14 @@ public class ReplyRepositoryImpl implements ReplyRepository{
     }
 
     private static final String SQL_SELECT_ALL_REPLY
-            = "select * from reply";
+            = "select * from reply where topic_id = ?";
     private static final String SQL_SELECT_ATTACH
             = "select attachment from attachment where reply_id = ?";
 
     @Override
-    public List<Reply> findAll() {
+    public List<Reply> findAll(long topic_id) {
         List<Reply> replys = new ArrayList<>();
-        List<Map<String, Object>> rows = jdbcOp.queryForList(SQL_SELECT_ALL_REPLY);
+        List<Map<String, Object>> rows = jdbcOp.queryForList(SQL_SELECT_ALL_REPLY, topic_id);
 
         for (Map<String, Object> row : rows) {
             Reply reply = new Reply();

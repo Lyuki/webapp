@@ -9,7 +9,7 @@ public interface ReplyRepository {
 
     public void editByID(Reply reply);
 
-    public List<Reply> findAll();
+    public List<Reply> findAll(long tid);
 
     public Reply findByID(long id);
 
