@@ -32,8 +32,8 @@
             </c:forEach><br /><br />
         </c:if>
             <br/> 
-            <a href="<c:url value="/replys/view/${topicId}" />">Go to see reply</a>
-            <br/> 
-        <a href="<c:url value="/topic" />">Return to topic list</a>
+            <a href="<c:url value="/replys/view/${topicId}/${cate}" />">Go to see reply</a>
+            <br/> <br/><br/>
+        <a href="<c:url value="/topic/${cate}" />">Return to topic list</a>
     </body>
 </html>

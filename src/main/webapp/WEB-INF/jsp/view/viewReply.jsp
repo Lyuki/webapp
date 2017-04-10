@@ -23,8 +23,8 @@
             <c:otherwise>
                 <c:forEach items="${replyDatabase}" var="entry">
                     <ul>
-                        <li><a href="<c:out value="${entry.id}" />">
-                                <c:out value="${entry.msg}" /></a>
+                        <li> >>
+                            <c:out value="${entry.msg}" />
                             (<c:out value="${entry.customerName}" /> reply)
                             <security:authorize access="hasRole('ADMIN')">            
                                 [<a href="<c:url value="/replys/delete/${entry.id}" />">Delete</a>]
@@ -46,9 +46,9 @@
         </c:choose>
         <br/><br/>
         <security:authorize access="isAuthenticated()">
-            <a href="<c:url value="/replys/create/${topicId}" />">Create Reply</a><br /><br /> 
+            <a href="<c:url value="/replys/create/${topicId}/${cate}" />">Create Reply</a><br /><br /> 
         </security:authorize>
-        <a href="<c:url value="/topic" />">Return to Topic list</a>
+        <a href="<c:url value="/topic/${cate}" />">Return to Topic list</a>
 
     </body>
 </html>

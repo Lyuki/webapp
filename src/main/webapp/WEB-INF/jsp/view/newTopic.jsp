@@ -22,5 +22,7 @@
             <input type="file" name="attachments" multiple="multiple"/><br/><br/>
             <input type="submit" value="Submit"/>
         </form:form>
+            <br/><br/>
+            <a href="<c:url value="/topic/${cate}" />">Return to Topic list</a>
     </body>
 </html>
