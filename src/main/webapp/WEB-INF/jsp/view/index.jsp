@@ -32,16 +32,17 @@
         
         <security:authorize access="isAuthenticated()">
             <h2>Poll:</h2>
-            <form action="checkboxes" method="POST">       
+            <form:form enctype="multipart/form-data" method="POST" modelAttribute="voteForm">       
                 <c:forEach items="${poll}" var="poll">
                 <c:out value="${poll.question}"/><br/>
-                <input type="radio" name="ans" value="ans1"/><c:out value="${poll.ans1}"/><br/>
-                <input type="radio" name="ans" value="ans2"/><c:out value="${poll.ans2}"/><br/>
-                <input type="radio" name="ans" value="ans3"/><c:out value="${poll.ans3}"/><br/>
-                <input type="radio" name="ans" value="ans4"/><c:out value="${poll.ans4}"/><br/>
+                <input type="hidden" name="pollId" value="${poll.id}"/>
+                <input type="radio" name="ansId" value="ans1"/><c:out value="${poll.ans1}"/><br/>
+                <input type="radio" name="ansId" value="ans2"/><c:out value="${poll.ans2}"/><br/>
+                <input type="radio" name="ansId" value="ans3"/><c:out value="${poll.ans3}"/><br/>
+                <input type="radio" name="ansId" value="ans4"/><c:out value="${poll.ans4}"/><br/>
                 <br/><input type="submit" value="Submit"/>
                 </c:forEach>
-            </form>
+            </form:form>
         </security:authorize>
 
         <h2>Poll Result:</h2>
