@@ -17,7 +17,7 @@
             <form:input type="text" path="title" /><br/><br/>
             <form:label path="msg">Message</form:label><br/>
             <form:textarea path="msg" rows="5" cols="30" /><br/><br/>
-            <form:input type="hidden" path="category" value="${topics.cate}"/>
+            <form:input type="hidden" path="category" value="${cate}"/>
             <b>Attachments</b><br/>
             <input type="file" name="attachments" multiple="multiple"/><br/><br/>
             <input type="submit" value="Submit"/>
