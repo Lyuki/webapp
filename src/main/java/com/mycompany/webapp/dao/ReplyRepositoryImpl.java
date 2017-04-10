@@ -37,7 +37,7 @@ public class ReplyRepositoryImpl implements ReplyRepository{
     }
 
     private static final String SQL_INSERT_REPLY
-            = "insert into reply (msg, topic_id, username) values (?, ?, ?, ?)";
+            = "insert into reply (msg, topic_id, username) values (?, ?, ?)";
     private static final String SQL_INSERT_ATTACH
             = "insert into attachment (topic_id, reply_id, username, attachment) values ( ?,(SELECT MAX(ID) FROM REPLY), ?, ?)";
 
