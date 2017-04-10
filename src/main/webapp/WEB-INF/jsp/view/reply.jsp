@@ -4,11 +4,16 @@
         <title>${topic.title}</title>
     </head>
     <body>
-        <c:url var="logoutUrl" value="/logout"/>
-        <form action="${logoutUrl}" method="post">
-            <input type="submit" value="Log out" />
-            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-        </form>
+         <security:authorize access="isAuthenticated()">
+             <c:url var="logoutUrl" value="/logout"/>
+              <form action="${logoutUrl}" method="post">
+                  <input type="submit" value="Log out" />
+                  <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+              </form>
+        </security:authorize>
+        <security:authorize access="isAnonymous()">
+            <a href="<c:url value="/login" />">Login</a><br /><br />  
+        </security:authorize>
 
         <h2>Topic #${topicId}: <c:out value="${topic.title}" /></h2>
         <security:authorize access="hasRole('ADMIN')">            
@@ -26,6 +31,9 @@
                     <c:out value="${attachment.name}" /></a>
             </c:forEach><br /><br />
         </c:if>
+            <br/> 
+            <a href="<c:url value="/replys/view/${topicId}" />">Go to see reply</a>
+            <br/> 
         <a href="<c:url value="/topic" />">Return to topic list</a>
     </body>
 </html>
