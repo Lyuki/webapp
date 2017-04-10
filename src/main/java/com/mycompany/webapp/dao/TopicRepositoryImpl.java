@@ -61,14 +61,14 @@ public class TopicRepositoryImpl implements TopicRepository {
     }
 
     private static final String SQL_SELECT_ALL_TOPIC
-            = "select * from topic";
+            = "select * from topic where category = ?";
     private static final String SQL_SELECT_ATTACH
             = "select attachment from attachment where topic_id = ?";
 
     @Override
-    public List<Topics> findAll() {
+    public List<Topics> findAll(String cate) {
         List<Topics> topics = new ArrayList<>();
-        List<Map<String, Object>> rows = jdbcOp.queryForList(SQL_SELECT_ALL_TOPIC);
+        List<Map<String, Object>> rows = jdbcOp.queryForList(SQL_SELECT_ALL_TOPIC, cate);
 
         for (Map<String, Object> row : rows) {
             Topics topic = new Topics();
