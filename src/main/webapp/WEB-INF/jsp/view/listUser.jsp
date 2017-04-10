@@ -42,7 +42,8 @@
                     ${role}
                   </c:forEach>
                 </td>
-                <td>[<a href="<c:url value="/user/delete/${user.username}" />">Delete</a>]</td>
+                <td>[<a href="<c:url value="/user/edit/${user.username}" />">Edit</a>]
+                    [<a href="<c:url value="/user/delete/${user.username}" />">Delete</a>]</td>
               </tr>
             </c:forEach>
           </table>
