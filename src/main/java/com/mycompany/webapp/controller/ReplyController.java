@@ -37,26 +37,35 @@ public class ReplyController {
         model.addAttribute("replyDatabase", replyRepo.findAll());
         return "topic";
     }
-    
-    @RequestMapping(value = {"view/{topicId}"}, method = RequestMethod.GET)
-    public String reply(ModelMap model) {
-        model.addAttribute("topicId", "{topicId}");
-        model.addAttribute("replyDatabase", replyRepo.findAll());
-        return "viewReply";
-    }
 
- 
+    @RequestMapping(value = {"view/{topicId}"}, method = RequestMethod.GET)
+    public ModelAndView reply(ModelMap model, @PathVariable("topicId") long topicId) {
+        model.addAttribute("topicId", topicId);
+        model.addAttribute("replyDatabase", replyRepo.findAll());
+        return new ModelAndView("/viewReply");
+    }
 
     @RequestMapping(value = "create/{topicId}", method = RequestMethod.GET)
-    public ModelAndView createReply() {
-        return new ModelAndView("createReply", "replyForm", new ReplyForm());
+    public ModelAndView createReply(@PathVariable("topicId") long topicId) {
+        /*ModelAndView modelAndView = new ModelAndView("createReply", "replyForm", new Form());
+         modelAndView.addObject("tId", topicId);
+         return modelAndView;*/
+
+        ModelAndView modelAndView = new ModelAndView("createReply");
+        modelAndView.addObject("topicId", Long.toString(topicId));
+
+        Form replyForm = new Form();
+        modelAndView.addObject("replyForm", replyForm);
+
+        return modelAndView;
+        //return new ModelAndView("createReply", "replyForm", new Form());
     }
 
-    public static class ReplyForm {
+    public static class Form {
 
         private String msg;
         private long topicId;
-        private Map<String, Attachment> attachments = new LinkedHashMap<>();
+        private List<MultipartFile> attachments;
 
         public String getMsg() {
             return msg;
@@ -74,20 +83,21 @@ public class ReplyController {
             this.topicId = topicId;
         }
 
-        public Map<String, Attachment> getAttachments() {
+        public List<MultipartFile> getAttachments() {
             return attachments;
         }
 
-        public void setAttachments(Map<String, Attachment> attachments) {
+        public void setAttachments(List<MultipartFile> attachments) {
             this.attachments = attachments;
         }
     }
 
     @RequestMapping(value = "create/{topicId}", method = RequestMethod.POST)
-    public View create(TopicController.Form form, Principal principal) throws IOException {
+    public View create(Form form, Principal principal) throws IOException {
         Reply reply = new Reply();
         reply.setId(this.getNextReplyId());
         reply.setCustomerName(principal.getName());
+        reply.setTopicId(form.getTopicId());
         reply.setMsg(form.getMsg());
 
         for (MultipartFile filePart : form.getAttachments()) {
@@ -104,7 +114,7 @@ public class ReplyController {
         this.replyDatabase.put(reply.getId(), reply);
         replyRepo.create(reply);
         //return new RedirectView("/topic/" + topic.getId(), true);
-        return new RedirectView("/topic/{topicId}", true);
+        return new RedirectView("/replys/view/" + form.getTopicId(), true);
     }
 
     private synchronized long getNextReplyId() {
