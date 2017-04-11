@@ -108,6 +108,22 @@ public class ReplyRepositoryImpl implements ReplyRepository{
         }
         return reply;
     }
+    
+    private static final String SQL_SELECT_ATTACH_BYID
+            = "select * from attachment where reply_id = ? and filename = ?";
+
+    @Override
+    public Attachment findAttachByID(long id, String filename) {
+        List<Map<String, Object>> rows = jdbcOp.queryForList(SQL_SELECT_ATTACH_BYID,
+                id,filename);
+        Attachment attach = new Attachment();
+        for (Map<String, Object> row : rows) {        
+                attach.setContents((byte[])row.get("content"));
+                attach.setMimeContentType((String)row.get("content_type"));
+                attach.setName((String)row.get("filename"));           
+        }
+        return attach;
+    }
 
     private static final String SQL_DELETE_REPLY
             = "delete from reply where id = ?";
