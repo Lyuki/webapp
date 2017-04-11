@@ -41,7 +41,7 @@ public class TopicRepositoryImpl implements TopicRepository {
     private static final String SQL_INSERT_TOPIC
             = "insert into topic (title, msg, category, username) values (?, ?, ?, ?)";
     private static final String SQL_INSERT_ATTACH
-            = "insert into attachment (topic_id, reply_id, username, attachment) values ((SELECT MAX(ID) FROM TOPIC), ?, ?, ?)";
+            = "insert into attachment (topic_id, reply_id, username, filename, content_type, content) values ((SELECT MAX(ID) FROM TOPIC), ?, ?, ?, ?, ?)";
 
     @Override
     public void create(Topics topic) {
@@ -56,14 +56,16 @@ public class TopicRepositoryImpl implements TopicRepository {
             jdbcOp.update(SQL_INSERT_ATTACH,
                     0,
                     topic.getCustomerName(),
-                    attach);
+                    attach.getName(),
+                    attach.getMimeContentType(),
+                    attach.getContents());
         }
     }
 
     private static final String SQL_SELECT_ALL_TOPIC
             = "select * from topic where category = ?";
     private static final String SQL_SELECT_ATTACH
-            = "select attachment from attachment where topic_id = ?";
+            = "select filename, content_type, content from attachment where topic_id = ?";
 
     @Override
     public List<Topics> findAll(String cate) {
@@ -80,7 +82,11 @@ public class TopicRepositoryImpl implements TopicRepository {
             topic.setCustomerName((String) row.get("username"));
             List<Map<String, Object>> roleRows = jdbcOp.queryForList(SQL_SELECT_ATTACH, tid);
             for (Map<String, Object> roleRow : roleRows) {
-                topic.addAttachment((Attachment) roleRow.get("attachment"));
+                Attachment attach = new Attachment();
+                attach.setContents((byte[])roleRow.get("content"));
+                attach.setMimeContentType((String)roleRow.get("content_type"));
+                attach.setName((String)roleRow.get("filename"));
+                topic.addAttachment(attach);
             }
             topics.add(topic);
         }
@@ -98,7 +104,11 @@ public class TopicRepositoryImpl implements TopicRepository {
                 id);
 
         for (Map<String, Object> row : rows) {
-            topic.addAttachment((Attachment) row.get("attachment"));
+            Attachment attach = new Attachment();
+                attach.setContents((byte[])row.get("content"));
+                attach.setMimeContentType((String)row.get("content_type"));
+                attach.setName((String)row.get("filename"));
+            topic.addAttachment(attach);
         }
         return topic;
     }
@@ -117,7 +127,7 @@ public class TopicRepositoryImpl implements TopicRepository {
     private static final String SQL_UPDATE_TOPIC
             = "update topic set title = ?, msg = ? , category = ?, username = ? where id = ?";
     private static final String SQL_UPDATE_ATTACH
-            = "update attachment set username = ?, attachment = ? where topic_id = ?";
+            = "update attachment set username = ?, filename = ?, content_type = ?, content = ? where topic_id = ?";
     
     @Override
     public void editByID(Topics topic) {
@@ -132,7 +142,9 @@ public class TopicRepositoryImpl implements TopicRepository {
         for (Attachment attach : topic.getAttachments()) {
             jdbcOp.update(SQL_UPDATE_ATTACH,
                     topic.getCustomerName(),
-                    attach,
+                    attach.getName(),
+                    attach.getMimeContentType(),
+                    attach.getContents(),
                     topic.getId()
                     );
         }
