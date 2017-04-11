@@ -33,7 +33,9 @@ CREATE TABLE attachment (
     topic_id INTEGER,
     reply_id INTEGER,
     username VARCHAR(50) NOT NULL,
-    attachment blob
+    filename VARCHAR(255) DEFAULT NULL,
+    content_type VARCHAR(255) DEFAULT NULL,
+    content BLOB DEFAULT NULL
 );
 
 CREATE TABLE poll (
