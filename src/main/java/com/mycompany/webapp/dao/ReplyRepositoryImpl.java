@@ -39,7 +39,7 @@ public class ReplyRepositoryImpl implements ReplyRepository{
     private static final String SQL_INSERT_REPLY
             = "insert into reply (msg, topic_id, username) values (?, ?, ?)";
     private static final String SQL_INSERT_ATTACH
-            = "insert into attachment (topic_id, reply_id, username, attachment) values ( ?,(SELECT MAX(ID) FROM REPLY), ?, ?)";
+            = "insert into attachment (topic_id, reply_id, username, filename, content_type, content) values (?,(SELECT MAX(ID) FROM REPLY),  ?, ?, ?, ?)";
 
     @Override
     public void create(Reply reply) {
@@ -53,14 +53,16 @@ public class ReplyRepositoryImpl implements ReplyRepository{
             jdbcOp.update(SQL_INSERT_ATTACH,
                     0,
                     reply.getCustomerName(),
-                    attach);
+                    attach.getName(),
+                    attach.getMimeContentType(),
+                    attach.getContents());
         }
     }
 
     private static final String SQL_SELECT_ALL_REPLY
             = "select * from reply where topic_id = ?";
     private static final String SQL_SELECT_ATTACH
-            = "select attachment from attachment where reply_id = ?";
+            = "select filename, content, content_type from attachment where reply_id = ?";
 
     @Override
     public List<Reply> findAll(long topic_id) {
@@ -76,7 +78,11 @@ public class ReplyRepositoryImpl implements ReplyRepository{
             reply.setCustomerName((String) row.get("username"));
             List<Map<String, Object>> roleRows = jdbcOp.queryForList(SQL_SELECT_ATTACH, tid);
             for (Map<String, Object> roleRow : roleRows) {
-                reply.addAttachment((Attachment) roleRow.get("attachment"));
+                Attachment attach = new Attachment();
+                attach.setContents((byte[])roleRow.get("content"));
+                attach.setMimeContentType((String)roleRow.get("content_type"));
+                attach.setName((String)roleRow.get("filename"));
+                reply.addAttachment(attach);
             }
             replys.add(reply);
         }
@@ -94,7 +100,11 @@ public class ReplyRepositoryImpl implements ReplyRepository{
                 id);
 
         for (Map<String, Object> row : rows) {
-            reply.addAttachment((Attachment) row.get("attachment"));
+            Attachment attach = new Attachment();
+                attach.setContents((byte[])row.get("content"));
+                attach.setMimeContentType((String)row.get("content_type"));
+                attach.setName((String)row.get("filename"));
+                reply.addAttachment(attach);
         }
         return reply;
     }
@@ -113,7 +123,7 @@ public class ReplyRepositoryImpl implements ReplyRepository{
     private static final String SQL_UPDATE_REPLY
             = "update reply set msg = ? , topic_id = ?, username = ? where id = ?";
     private static final String SQL_UPDATE_ATTACH
-            = "update attachment set username = ?, attachment = ? where reply_id = ?";
+            = "update attachment set username = ?, filename = ?, content_type = ?, content = ? where reply_id = ?";
     
     @Override
     public void editByID(Reply reply) {
@@ -127,7 +137,9 @@ public class ReplyRepositoryImpl implements ReplyRepository{
         for (Attachment attach : reply.getAttachments()) {
             jdbcOp.update(SQL_UPDATE_ATTACH,
                     reply.getCustomerName(),
-                    attach,
+                    attach.getName(),
+                    attach.getMimeContentType(),
+                    attach.getContents(),
                     reply.getId()
                     );
         }
