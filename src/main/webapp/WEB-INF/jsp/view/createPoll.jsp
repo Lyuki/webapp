@@ -1,7 +1,15 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Poll creation</title>
+        <title>
+            <c:if test="${language == 'English'}">
+                Poll creation
+            </c:if>
+            <c:if test="${language == 'Chinese'}">
+                建立投票
+            </c:if>
+            
+        </title>
     </head>
     <body>
         <c:if test="${param.error != null}">

@@ -1,7 +1,15 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>New Poll</title>
+        <title>
+            <c:if test="${language == 'English'}">
+                New Poll
+            </c:if>
+            <c:if test="${language == 'Chinese'}">
+                新投票
+            </c:if>
+            
+        </title>
     </head>
     <body>
         <c:url var="logoutUrl" value="/logout"/>
@@ -12,9 +20,9 @@
             <c:if test="${language == 'Chinese'}">
                 <input type="submit" value="登出" />
             </c:if>
-
             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         </form>
+        
         <br/><br/>
         <c:if test="${language == 'English'}">
             <a href="<c:url value="/" />">Return to index page</a>
