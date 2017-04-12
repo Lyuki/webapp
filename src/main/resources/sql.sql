@@ -3,7 +3,7 @@
 CREATE TABLE users (
     id INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
     username VARCHAR(50) NOT NULL,
-    password VARCHAR(50) NOT NULL,
+    password VARCHAR(100) NOT NULL,
     PRIMARY KEY (id)
 );
 
@@ -60,7 +60,6 @@ INSERT INTO user_roles(username, role) VALUES ('demo', 'ROLE_ADMIN');
 
 /*INSERT INTO users VALUES (2,'keith', 'keithpw');
 INSERT INTO user_roles(user_id, role) VALUES (2, 'ROLE_USER');
-INSERT INTO user_roles(user_id, role) VALUES (2, 'ROLE_ADMIN');
 
 INSERT INTO users VALUES (3,'andrew', 'andrewpw');
 INSERT INTO user_roles(user_id, role) VALUES (3, 'ROLE_ADMIN');
