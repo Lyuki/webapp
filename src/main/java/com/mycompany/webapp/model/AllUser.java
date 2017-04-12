@@ -1,15 +1,12 @@
 package com.mycompany.webapp.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
-
 public class AllUser {
+
     private int id;
     private String username;
     private String password;
-    private List<String> roles = new ArrayList<>();
-    
+    private String roles;
+
     public int getId() {
         return id;
     }
@@ -33,17 +30,13 @@ public class AllUser {
     public void setPassword(String password) {
         this.password = password;
     }
-    
-    public List<String> getRoles() {
 
+    public String getRoles() {
         return roles;
-
     }
 
     public void addRole(String role) {
-
-        this.roles.add(role);
-
+        this.roles = role;
     }
 
     public boolean hasRole(String role) {
@@ -51,5 +44,4 @@ public class AllUser {
         return this.roles.contains(role);
 
     }
-
 }
