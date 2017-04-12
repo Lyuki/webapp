@@ -119,8 +119,9 @@ public class IndexController {
         return new RedirectView("/", true);
     }
 
-    @RequestMapping("login")
-    public String login() {
+    @RequestMapping(value = "login", method = RequestMethod.GET)
+    public String login(ModelMap model) {
+        model.addAttribute("language", LANGUAGEOPT);
         return "login";
     }
 
