@@ -81,7 +81,7 @@
                         <ul>
                             <li> >>
                                 <c:out value="${entry.msg}" />
-                                (<c:out value="${entry.customerName}" /> reply)
+                                (<c:out value="${entry.customerName}" /> 回覆)
                                 <security:authorize access="hasRole('ADMIN')">            
                                     [<a href="<c:url value="/replys/delete/${entry.id}" />">刪除</a>]
                                 </security:authorize>           
