@@ -36,6 +36,10 @@
     <servlet-mapping>
         <servlet-name>dispatcher</servlet-name>
         <url-pattern>/</url-pattern>
+        <context-param>
+            <param-name>language</param-name>
+            <param-value>English</param-value>
+        </context-param>
     </servlet-mapping>
 
     <jsp-config>

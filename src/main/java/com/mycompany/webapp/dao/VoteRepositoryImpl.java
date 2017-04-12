@@ -1,5 +1,6 @@
 package com.mycompany.webapp.dao;
 
+import com.mycompany.webapp.model.Result;
 import com.mycompany.webapp.model.Vote;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -34,6 +35,42 @@ public class VoteRepositoryImpl implements VoteRepository {
             vote.setCustomerName(rs.getString("username"));
             vote.setAnsId(rs.getLong("ans_id"));
             return vote;
+        }
+    }
+    
+    private static final class ResultRowMapper implements RowMapper<Result> {
+
+        @Override
+        public Result mapRow(ResultSet rs, int i) throws SQLException {
+            Result result = new Result();
+            if (rs.getString("result1") == null) {
+                result.setResult1(0);
+            }else {
+            result.setResult1(rs.getLong("result1"));
+            }
+            if (rs.getString("result2") == null) {
+                result.setResult2(0);
+            }else {
+            result.setResult2(rs.getLong("result2"));
+            }
+            if (rs.getString("result3") == null) {
+                result.setResult3(0);
+            }else {
+            result.setResult3(rs.getLong("result3"));
+            }
+            if (rs.getString("result4") == null) {
+                result.setResult4(0);
+            }else {
+            result.setResult4(rs.getLong("result4"));
+            }
+            
+            result.setTitle(rs.getString("question"));
+            result.setAns1(rs.getString("ans1"));
+            result.setAns2(rs.getString("ans2"));
+            result.setAns3(rs.getString("ans3"));
+            result.setAns4(rs.getString("ans4"));
+            result.setPollId(rs.getLong("id"));
+            return result;
         }
     }
 
@@ -80,6 +117,24 @@ public class VoteRepositoryImpl implements VoteRepository {
             return vote;
         } catch (EmptyResultDataAccessException e) {
             return new Vote();
+        }
+    }
+    
+    private static final String SQL_SELECT_NO_OF_VOTE
+            = "select id,question,ans1,ans2,ans3,ans4, (select count(*) from vote where poll_id = ? and ans_id = 1 group by poll_id, ans_id) as result1,\n" +
+"(select count(*) from vote where poll_id = ? and ans_id = 2 group by poll_id, ans_id) as result2,\n" +
+"(select count(*) from vote where poll_id = ? and ans_id = 3 group by poll_id, ans_id) as result3,\n" +
+"(select count(*) from vote where poll_id = ? and ans_id = 4 group by poll_id, ans_id) as result4\n" +
+"from POLL";
+
+    @Override
+    public Result findVoteByPollID(long pollId) {
+        try {
+            Result result = jdbcOp.queryForObject(SQL_SELECT_NO_OF_VOTE,
+                    new ResultRowMapper(), pollId, pollId, pollId, pollId);
+            return result;
+        } catch (EmptyResultDataAccessException e) {
+            return new Result();
         }
     }
 }
