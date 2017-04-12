@@ -75,7 +75,12 @@ public class TopicRepositoryImpl implements TopicRepository {
     }
 
     private static final String SQL_SELECT_ALL_TOPIC
-            = "select * from topic where category = ?";
+            = "select topic.id,topic.title,topic.msg,topic.category,topic.username\n" +
+",count(reply.id) as result\n" +
+"from topic left join reply on\n" +
+"topic.ID = reply.TOPIC_ID \n" +
+"where topic.category = ?\n" +
+"group by topic.id,topic.title,topic.msg,topic.category,topic.username";
     private static final String SQL_SELECT_ATTACH
             = "select filename, content_type, content from attachment where topic_id = ?";
 
@@ -92,6 +97,7 @@ public class TopicRepositoryImpl implements TopicRepository {
             topic.setMsg((String) row.get("msg"));
             topic.setCategory((String) row.get("category"));
             topic.setCustomerName((String) row.get("username"));
+            topic.setNumOfReply((int) row.get("result"));
             List<Map<String, Object>> roleRows = jdbcOp.queryForList(SQL_SELECT_ATTACH, tid);
             for (Map<String, Object> roleRow : roleRows) {
                 Attachment attach = new Attachment();

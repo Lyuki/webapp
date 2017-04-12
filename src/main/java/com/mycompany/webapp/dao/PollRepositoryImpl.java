@@ -53,7 +53,7 @@ public class PollRepositoryImpl implements PollRepository{
         }
         
         private static final String SQL_SELECT_ALL_POLL
-            = "select * from poll where id = (select max(id) from poll)";
+            = "select * from poll";
         
         @Override
         public List<Poll> findAll() {

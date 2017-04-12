@@ -125,13 +125,13 @@ public class VoteRepositoryImpl implements VoteRepository {
 "(select count(*) from vote where poll_id = ? and ans_id = 2 group by poll_id, ans_id) as result2,\n" +
 "(select count(*) from vote where poll_id = ? and ans_id = 3 group by poll_id, ans_id) as result3,\n" +
 "(select count(*) from vote where poll_id = ? and ans_id = 4 group by poll_id, ans_id) as result4\n" +
-"from POLL";
+"from POLL where id = ?";
 
     @Override
     public Result findVoteByPollID(long pollId) {
         try {
             Result result = jdbcOp.queryForObject(SQL_SELECT_NO_OF_VOTE,
-                    new ResultRowMapper(), pollId, pollId, pollId, pollId);
+                    new ResultRowMapper(), pollId, pollId, pollId, pollId, pollId);
             return result;
         } catch (EmptyResultDataAccessException e) {
             return new Result();
