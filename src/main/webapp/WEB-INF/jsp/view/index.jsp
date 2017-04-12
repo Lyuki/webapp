@@ -12,9 +12,30 @@
             </form>
         </security:authorize>
         <security:authorize access="isAnonymous()">
-            <a href="<c:url value="/login" />">Login</a><br /><br />  
+            <a href="<c:url value="/login" />">Login</a>  
         </security:authorize>
+
+            
+            <a href="<c:url value="/chinese" />" style="float: right;">
+            <c:if test="${language == 'English'}">
+                Chinese
+            </c:if>
+            <c:if test="${language == 'Chinese'}">
+                中文
+            </c:if>
+        </a>
+        <label style="float: right;">&nbsp;/&nbsp;</label>
+        
+        <a href="<c:url value="/english" />" style="float: right;">
+            <c:if test="${language == 'English'}">
+                English
+            </c:if>
+            <c:if test="${language == 'Chinese'}">
+                英文
+            </c:if>
+        </a>
         <br />
+
         <security:authorize access="hasRole('ADMIN')">
             <a href="<c:url value="/user/list" />">Manage User Account</a><br /><br />  
         </security:authorize>
@@ -31,9 +52,10 @@
         </security:authorize>
 
         <security:authorize access="isAuthenticated()">
+           
             <h2>Poll:</h2>
+            <c:if test="${vote.id == 0}">
             <form:form enctype="multipart/form-data" method="POST" modelAttribute="VoteForm">       
-                <c:forEach items="${poll}" var="poll">
                     <c:out value="${poll.question}"/><br/>
                     <form:input type="hidden" path="pollId" value="${poll.id}" />              
                     <form:radiobutton path="ansId" value="1"/><form:label path="ansId">
@@ -45,8 +67,12 @@
                         <form:radiobutton path="ansId" value="4"/><form:label path="ansId">
                         ${poll.ans4}</form:label><br/>
                     <br/><input type="submit" value="Submit"/>
-                </c:forEach>
-            </form:form>                 
+                
+            </form:form>  
+           </c:if>
+            <c:if test="${vote.id != 0}">
+                Thank you for your participation.
+            </c:if>
         </security:authorize>
 
         <h2>Poll Result:</h2>
