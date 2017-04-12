@@ -6,5 +6,5 @@ import java.util.List;
 public interface VoteRepository {
     public void create(Vote vote);
     public List<Vote> findAll();
-    public Vote findByPollID(long pollId);
+    public Vote findByPollID(long pollId, String username);
 }
