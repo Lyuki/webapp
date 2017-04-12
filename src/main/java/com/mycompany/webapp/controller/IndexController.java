@@ -1,6 +1,7 @@
 package com.mycompany.webapp.controller;
 
 import com.mycompany.webapp.dao.PollRepository;
+import com.mycompany.webapp.dao.TopicRepository;
 import com.mycompany.webapp.dao.VoteRepository;
 import static com.mycompany.webapp.model.MyConstants.LANGUAGEOPT;
 import com.mycompany.webapp.model.Poll;
@@ -16,6 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.view.RedirectView;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.View;
@@ -29,6 +31,8 @@ public class IndexController {
     @Autowired
     VoteRepository voteRepo;
     Result result = new Result();
+    @Autowired
+    TopicRepository topicRepo;
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public ModelAndView index(Principal principal) {
@@ -41,6 +45,10 @@ public class IndexController {
         
         modelAndView.addObject("result",voteRepo.findVoteByPollID(poll.getId()));
         modelAndView.addObject("language", LANGUAGEOPT);
+        modelAndView.addObject("pollHistory", pollRepo.findAll());
+        modelAndView.addObject("Lecture", topicRepo.findAll("Lecture"));
+        modelAndView.addObject("Lab", topicRepo.findAll("Lab"));
+        modelAndView.addObject("Other", topicRepo.findAll("Other"));
 
         VoteForm voteForm = new VoteForm();
         modelAndView.addObject("VoteForm", voteForm);
@@ -89,6 +97,14 @@ public class IndexController {
 
         voteRepo.create(vote);
         return new RedirectView("/", true);
+    }
+    
+    @RequestMapping(value = "{pollId}", method = RequestMethod.GET)
+    public ModelAndView viewVote(@PathVariable("pollId") long pollId) throws IOException {
+        ModelAndView modelAndView = new ModelAndView("viewHistory");
+        modelAndView.addObject("result",voteRepo.findVoteByPollID(pollId));
+        modelAndView.addObject("language", LANGUAGEOPT);
+        return modelAndView;
     }
 
     @RequestMapping(value = "chinese", method = RequestMethod.GET)
