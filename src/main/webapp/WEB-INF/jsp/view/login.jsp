@@ -19,7 +19,7 @@
             <input type="checkbox" id="remember-me" name="remember-me" />
             <label for="remember-me">Remember me</label><br/><br/>
             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-            <input type="submit" value="Log In"/><br/>
+            <input type="submit" value="Log In"/><br/><br/>
             <a href="<c:url value="/user/create" />">Register</a>
         </form>
         <br/><br/>
