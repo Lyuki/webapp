@@ -8,6 +8,6 @@ public interface UserRepository {
     public void create(AllUser user);
     public List<AllUser> findAll();
     public AllUser findByUsername(String username);
-    public void editUser(String username);
+    public void editUser(AllUser editUser);
     public void deleteByUsername(String username);
 }
