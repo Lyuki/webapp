@@ -2,6 +2,7 @@ package com.mycompany.webapp.controller;
 
 import com.mycompany.webapp.dao.ReplyRepository;
 import com.mycompany.webapp.model.Attachment;
+import static com.mycompany.webapp.model.MyConstants.LANGUAGEOPT;
 import com.mycompany.webapp.model.Reply;
 import com.mycompany.webapp.model.Topics;
 import com.mycompany.webapp.view.DownloadingView;
@@ -35,6 +36,7 @@ public class ReplyController {
     public String topic(ModelMap model) {
         //model.addAttribute("topicDatabase", topicDatabase);
         model.addAttribute("replyDatabase", replyRepo.findAll(0));
+        model.addAttribute("language", LANGUAGEOPT);
         return "topic";
     }
 
@@ -43,6 +45,7 @@ public class ReplyController {
         model.addAttribute("topicId", topicId);
         model.addAttribute("cate", cate);
         model.addAttribute("replyDatabase", replyRepo.findAll(topicId));
+        model.addAttribute("language", LANGUAGEOPT);
         return new ModelAndView("/viewReply");
     }
 
@@ -55,6 +58,8 @@ public class ReplyController {
         ModelAndView modelAndView = new ModelAndView("createReply");
         modelAndView.addObject("topicId", Long.toString(topicId));
         modelAndView.addObject("cate", cate);
+        
+        modelAndView.addObject("language", LANGUAGEOPT);
 
         Form replyForm = new Form();
         modelAndView.addObject("replyForm", replyForm);

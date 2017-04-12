@@ -3,6 +3,7 @@ package com.mycompany.webapp.controller;
 import com.mycompany.webapp.dao.ReplyRepository;
 import com.mycompany.webapp.dao.TopicRepository;
 import com.mycompany.webapp.model.Attachment;
+import static com.mycompany.webapp.model.MyConstants.LANGUAGEOPT;
 import com.mycompany.webapp.model.Reply;
 import com.mycompany.webapp.model.Topics;
 import com.mycompany.webapp.view.DownloadingView;
@@ -36,6 +37,7 @@ public class TopicController {
     public String topic(ModelMap model) {
         //model.addAttribute("topicDatabase", topicDatabase);
         model.addAttribute("topicDatabase", topicRepo.findAll(""));
+        model.addAttribute("language", LANGUAGEOPT);
         return "topic";
     }
     
@@ -43,6 +45,7 @@ public class TopicController {
     public ModelAndView catetopic(ModelMap model,@PathVariable("cate") String cate) {
         model.addAttribute("cate", cate);
         model.addAttribute("topicDatabase", topicRepo.findAll(cate));
+        model.addAttribute("language", LANGUAGEOPT);
         return new ModelAndView("/topic");
     }
 
@@ -57,6 +60,7 @@ public class TopicController {
         modelAndView.addObject("topicId", Long.toString(topicId));
         modelAndView.addObject("cate", cate);
         modelAndView.addObject("topic", topic);
+        modelAndView.addObject("language", LANGUAGEOPT);
         return modelAndView;
     }
 
@@ -64,7 +68,8 @@ public class TopicController {
     public ModelAndView create(@PathVariable("cate") String cate) {       
         ModelAndView modelAndView = new ModelAndView("newTopic");
         modelAndView.addObject("cate", cate);
-
+        modelAndView.addObject("language", LANGUAGEOPT);
+        
         Form replyForm = new Form();
         modelAndView.addObject("topicForm", replyForm);
 
@@ -183,6 +188,8 @@ public class TopicController {
         ModelAndView modelAndView = new ModelAndView("edit");
         modelAndView.addObject("topicId", Long.toString(topicId));
         modelAndView.addObject("topic", topic);
+        
+        modelAndView.addObject("language", LANGUAGEOPT);
 
         Form topicForm = new Form();
         topicForm.setMsg(topic.getMsg());
