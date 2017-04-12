@@ -22,15 +22,23 @@
         <br /><br />
         <i>User Name - <c:out value="${topic.customerName}" /></i><br /><br />
         <c:out value="${topic.msg}" /><br /><br />
+        
+        
         <c:if test="${topic.numberOfAttachments > 0}">
             Attachments:
             <c:forEach items="${topic.attachments}" var="attachment"
                        varStatus="status">
                 <c:if test="${!status.first}">, </c:if>
+                <security:authorize access="isAuthenticated()">
                 <a href="<c:url value="/topic/${topicId}/attachment/${attachment.name}" />">
                     <c:out value="${attachment.name}" /></a>
+                </security:authorize>    
+                <security:authorize access="isAnonymous()">
+                    <c:out value="${attachment.name}" />
+                </security:authorize>
             </c:forEach><br /><br />
         </c:if>
+        
             <br/> 
             <a href="<c:url value="/replys/view/${topicId}/${cate}" />">Go to see reply</a>
             <br/> <br/><br/>

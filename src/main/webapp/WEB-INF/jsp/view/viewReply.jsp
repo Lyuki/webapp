@@ -31,15 +31,22 @@
                             </security:authorize>           
                             <br />
                         </li>
+
                         <c:if test="${entry.numberOfAttachments > 0}">
                             Attachments:
                             <c:forEach items="${entry.attachments}" var="attachment"
                                        varStatus="status">
                                 <c:if test="${!status.first}">, </c:if>
-                                <a href="<c:url value="/replys/${entry.topicId}/attachment/${attachment.name}" />">
-                                    <c:out value="${attachment.name}" /></a>
-                            </c:forEach><br /><br />
+                                <security:authorize access="isAuthenticated()">
+                                    <a href="<c:url value="/replys/${entry.id}/attachment/${attachment.name}" />">
+                                        <c:out value="${attachment.name}" /></a>
+                                    </security:authorize>
+                                    <security:authorize access="isAnonymous()">
+                                        <c:out value="${attachment.name}" />
+                                    </security:authorize>
+                                </c:forEach><br /><br />
                         </c:if>
+
                     </ul>
                 </c:forEach>
             </c:otherwise>
