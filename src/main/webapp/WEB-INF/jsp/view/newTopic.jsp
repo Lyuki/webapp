@@ -12,15 +12,15 @@
     </head>
     <body>
         <c:url var="logoutUrl" value="/logout"/>
-        <form action="${logoutUrl}" method="post">
-            <c:if test="${language == 'English'}">
-                <input type="submit" value="Log out" />
-            </c:if>
-            <c:if test="${language == 'Chinese'}">
-                <input type="submit" value="登出" />
-            </c:if>
-            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-        </form>
+            <form action="${logoutUrl}" method="post">
+                <c:if test="${language == 'English'}">
+                    <input type="submit" value="Log out" />
+                </c:if>
+                <c:if test="${language == 'Chinese'}">
+                    <input type="submit" value="登出" />
+                </c:if>
+                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+            </form>
 
 
         <c:if test="${language == 'English'}">
