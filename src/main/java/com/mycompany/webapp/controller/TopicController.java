@@ -147,12 +147,12 @@ public class TopicController {
     )
     public View download(@PathVariable("topicId") long topicId,
             @PathVariable("attachment") String name) {
-        Topics topic = this.topicDatabase.get(topicId);
-        if (topic != null) {
-            Attachment attachment = topic.getAttachment(name);
-            if (attachment != null) {
-                return new DownloadingView(attachment.getName(),
-                        attachment.getMimeContentType(), attachment.getContents());
+        Attachment attach = topicRepo.findAttachByID(topicId, name);
+        //Topics topic = this.topicDatabase.get(topicId);
+        if (attach != null) {
+            //Attachment attachment = topic.getAttachment(name);
+            if (attach != null) {
+                return new DownloadingView(attach.getName(),attach.getMimeContentType(), attach.getContents());
             }
         }
         return new RedirectView("/index", true);
@@ -220,6 +220,6 @@ public class TopicController {
     @RequestMapping(value = "delete/{topicId}", method = RequestMethod.GET)
     public View deleteTopic(@PathVariable("topicId") long topicId) {
         topicRepo.deleteByID(topicId);
-        return new RedirectView("/index", true);
+        return new RedirectView("/", true);
     }
 }

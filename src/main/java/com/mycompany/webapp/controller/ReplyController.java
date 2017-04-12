@@ -129,12 +129,12 @@ public class ReplyController {
     )
     public View download(@PathVariable("replyId") long replyId,
             @PathVariable("attachment") String name) {
-        Reply reply = this.replyDatabase.get(replyId);
-        if (reply != null) {
-            Attachment attachment = reply.getAttachment(name);
-            if (attachment != null) {
-                return new DownloadingView(attachment.getName(),
-                        attachment.getMimeContentType(), attachment.getContents());
+        Attachment attach = replyRepo.findAttachByID(replyId, name);
+        //Reply reply = this.replyDatabase.get(replyId);
+        if (attach != null) {
+            //Attachment attachment = reply.getAttachment(name);
+            if (attach != null) {
+                return new DownloadingView(attach.getName(),attach.getMimeContentType(), attach.getContents());
             }
         }
         return new RedirectView("/index", true);
@@ -156,9 +156,9 @@ public class ReplyController {
     }
 
     @RequestMapping(value = "delete/{replyId}", method = RequestMethod.GET)
-    public View deleteReply(@PathVariable("replyId") long topicId) {
-        replyRepo.deleteByID(topicId);
-        return new RedirectView("/index", true);
+    public View deleteReply(@PathVariable("replyId") long replyId) {
+        replyRepo.deleteByID(replyId);
+        return new RedirectView("/", true);
     }
 
 }
