@@ -28,15 +28,15 @@ public class VoteRepositoryImpl implements VoteRepository {
         @Override
         public Vote mapRow(ResultSet rs, int i) throws SQLException {
             Vote vote = new Vote();
-            vote.setPollId(rs.getLong("pollId"));
-            vote.setCustomerName(rs.getString("customerName"));
-            vote.setAnsId(rs.getLong("ansId"));
+            vote.setPollId(rs.getLong("poll_id"));
+            vote.setCustomerName(rs.getString("username"));
+            vote.setAnsId(rs.getLong("ans_id"));
             return vote;
         }
     }
     
     private static final String SQL_INSERT_VOTE
-            = "insert into vote (pollId, customerName, ansId) values (?, ?, ?)";
+            = "insert into vote (poll_id, username, ans_id) values (?, ?, ?)";
     
     @Override
         public void create(Vote vote) {
@@ -59,16 +59,16 @@ public class VoteRepositoryImpl implements VoteRepository {
                 Vote votes = new Vote();
                 long vid = (int) row.get("id");
                 votes.setId(vid);
-                votes.setPollId((Long) row.get("pollId"));
-                votes.setCustomerName((String) row.get("customerName"));
-                votes.setAnsId((Long) row.get("ansId"));
+                votes.setPollId((Long) row.get("poll_id"));
+                votes.setCustomerName((String) row.get("username"));
+                votes.setAnsId((Long) row.get("ans_id"));
                 vote.add(votes);
             }
             return vote;
         }
         
     private static final String SQL_SELECT_VOTE
-            = "select * from poll where pollId = ?";
+            = "select * from vote where poll_id = ?";
     
     @Override
         public Vote findByPollID(long id) {
