@@ -37,7 +37,7 @@
 
         <a href="<c:url value="/chinese" />" style="float: right;">
             <c:if test="${language == 'English'}">
-                Chinese
+                中文
             </c:if>
             <c:if test="${language == 'Chinese'}">
                 中文
@@ -50,7 +50,7 @@
                 English
             </c:if>
             <c:if test="${language == 'Chinese'}">
-                英文
+                English
             </c:if>
         </a>
         <br />
