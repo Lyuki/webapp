@@ -29,7 +29,7 @@ public class UserService implements UserDetailsService {
         }
 
         List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(role));
+        authorities.add(new SimpleGrantedAuthority(user.getRoles()));
 
         return new User(user.getUsername(), user.getPassword(), authorities);
     }
