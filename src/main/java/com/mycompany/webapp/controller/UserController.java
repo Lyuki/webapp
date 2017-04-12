@@ -2,6 +2,7 @@ package com.mycompany.webapp.controller;
 
 import com.mycompany.webapp.dao.UserRepository;
 import com.mycompany.webapp.model.AllUser;
+import static com.mycompany.webapp.model.MyConstants.LANGUAGEOPT;
 import java.io.IOException;
 import java.security.Principal;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,7 @@ public class UserController {
     @RequestMapping(value = {"", "list"}, method = RequestMethod.GET)
     public String list(ModelMap model) {
         model.addAttribute("allUsers", userRepo.findAll());
+        model.addAttribute("language", LANGUAGEOPT);
         return "listUser";
     }
 
@@ -65,7 +67,12 @@ public class UserController {
 
     @RequestMapping(value = "create", method = RequestMethod.GET)
     public ModelAndView create() {
-        return new ModelAndView("addUser", "user", new Form());
+        ModelAndView modelAndView = new ModelAndView("addUser");
+            modelAndView.addObject("language", LANGUAGEOPT);
+            
+            Form form = new Form();
+            modelAndView.addObject("user", form);
+        return modelAndView;
     }
 
     @RequestMapping(value = "create", method = RequestMethod.POST)
@@ -87,7 +94,8 @@ public class UserController {
 
         ModelAndView modelAndView = new ModelAndView("editUser");
         modelAndView.addObject("username", username);
-
+        modelAndView.addObject("language", LANGUAGEOPT);
+        
         Form editForm = new Form();
         modelAndView.addObject("edituser", editForm);
 
