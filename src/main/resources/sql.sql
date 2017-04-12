@@ -2,15 +2,15 @@
 
 CREATE TABLE users (
     id INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
-    username VARCHAR(200) NOT NULL,
-    password VARCHAR(200) NOT NULL,
+    username VARCHAR(50) NOT NULL,
+    password VARCHAR(100) NOT NULL,
     PRIMARY KEY (id)
 );
 
 CREATE TABLE user_roles (
     id INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
-    username VARCHAR(200) NOT NULL,
-    role VARCHAR(100) NOT NULL
+    username VARCHAR(50) NOT NULL,
+    role VARCHAR(50) NOT NULL
 );
 
 CREATE TABLE topic (
@@ -54,19 +54,12 @@ CREATE TABLE vote (
     ans_id INTEGER NOT NULL
 );
 
-INSERT INTO users(username, password) VALUES ('demo', 'demo');
+/*INSERT INTO users(username, password) VALUES ('demo', 'demo');
+INSERT INTO user_roles(username, role) VALUES ('demo', 'ROLE_ADMIN');*/
+
+INSERT INTO users(username, password) VALUES ('demo', '$2a$10$TJP6EP88VGdHGyBSi/9N1O9It1HrnSoUv6qsjl6fDL6FVf/w00//y');
 INSERT INTO user_roles(username, role) VALUES ('demo', 'ROLE_ADMIN');
 
 INSERT INTO poll(question,ans1,ans2,ans3,ans4) VALUES ('Select the fruit you like to eat', 'Apple', 'Orange', 'Lemon', 'Banana');
 
-/*INSERT INTO users VALUES (2,'keith', 'keithpw');
-INSERT INTO user_roles(user_id, role) VALUES (2, 'ROLE_USER');
 
-INSERT INTO users VALUES (3,'andrew', 'andrewpw');
-INSERT INTO user_roles(user_id, role) VALUES (3, 'ROLE_ADMIN');
-
-INSERT INTO users VALUES (4,'maria', 'mariapw');
-INSERT INTO user_roles(user_id, role) VALUES (4, 'ROLE_USER');
-
-INSERT INTO users VALUES (5,'oliver', 'oliverpw');
-INSERT INTO user_roles(user_id, role) VALUES (5, 'ROLE_USER');*/
