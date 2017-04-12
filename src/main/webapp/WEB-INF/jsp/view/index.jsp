@@ -81,8 +81,8 @@
                     </c:if>
                     <c:if test="${language == 'Chinese'}">
                         演講
-                    </c:if>
-                </a><br /><br /></li>
+                    </c:if>           
+                </a>(${fn:length(Lecture)})<br /><br /></li>
             <li><a href="<c:url value="/Lab" />">
                     <c:if test="${language == 'English'}">
                         Lab
@@ -90,7 +90,8 @@
                     <c:if test="${language == 'Chinese'}">
                         實踐
                     </c:if>
-                </a><br /><br /></li>
+                </a>
+                    (${fn:length(Lab)})<br /><br /></li>
             <li><a href="<c:url value="/Other" />">
                     <c:if test="${language == 'English'}">
                         Other
@@ -98,7 +99,8 @@
                     <c:if test="${language == 'Chinese'}">
                         其他
                     </c:if>
-                </a><br /><br /></li>
+                </a>
+                    (${fn:length(Other)})<br /><br /></li>
         </ul>
 
         <security:authorize access="hasRole('ADMIN')">
@@ -163,5 +165,28 @@
         ${result.ans2}: ${result.result2}<br/>
         ${result.ans3}: ${result.result3}<br/>
         ${result.ans4}: ${result.result4}<br/>
+        
+        <br/><br/><br/>
+        <c:choose>
+            <c:when test="${fn:length(pollHistory) == 0}">
+                <i>There are no poll history in there</i>
+            </c:when>
+            <c:otherwise>
+                <c:if test="${language == 'English'}">
+                View History:
+            </c:if>
+            <c:if test="${language == 'Chinese'}">
+                歷史回顧：
+            </c:if>
+                
+                <ul>
+                <c:forEach items="${pollHistory}" var="entry">    
+                        <li><a href="<c:url value="/${entry.id}" />">
+                                ${entry.question}</a>
+                        </li>                               
+                </c:forEach>
+                </ul>
+            </c:otherwise>
+        </c:choose>
     </body>
 </html>

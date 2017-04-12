@@ -28,7 +28,7 @@
                     <ul>
                     <li><a href="<c:url value="/topic/reply/${cate}/${entry.id}" />">
                         <c:out value="${entry.title}" /></a>
-                    (<c:out value="${entry.customerName}" /> reply)
+                    (<c:out value="${entry.numOfReply}" />)
                     <security:authorize access="hasRole('ADMIN')">            
                         [<a href="<c:url value="/topic/delete/${entry.id}" />">Delete</a>]
                     </security:authorize>           
