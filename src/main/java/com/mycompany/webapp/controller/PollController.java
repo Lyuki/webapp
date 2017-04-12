@@ -2,6 +2,7 @@ package com.mycompany.webapp.controller;
 
 import com.mycompany.webapp.dao.PollRepository;
 import com.mycompany.webapp.dao.VoteRepository;
+import static com.mycompany.webapp.model.MyConstants.LANGUAGEOPT;
 import com.mycompany.webapp.model.Poll;
 import com.mycompany.webapp.model.Vote;
 import java.io.IOException;
@@ -33,7 +34,12 @@ public class PollController {
     
     @RequestMapping(value = "createPoll", method = RequestMethod.GET)
         public ModelAndView create() {
-        return new ModelAndView("newPoll", "pollForm", new Form());
+            ModelAndView modelAndView = new ModelAndView("newPoll");
+            modelAndView.addObject("language", LANGUAGEOPT);
+            
+            Form form = new Form();
+            modelAndView.addObject("pollForm", form);
+        return modelAndView;
     }
     
     public static class Form {
