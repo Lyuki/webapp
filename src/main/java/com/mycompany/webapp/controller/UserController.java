@@ -5,6 +5,7 @@ import com.mycompany.webapp.model.AllUser;
 import java.io.IOException;
 import java.security.Principal;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,8 +22,9 @@ public class UserController {
     @Autowired
     UserRepository userRepo;
 
-    //@Autowired
-    //private PasswordEncoder passwordEncoder;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @RequestMapping(value = {"", "list"}, method = RequestMethod.GET)
     public String list(ModelMap model) {
         model.addAttribute("allUsers", userRepo.findAll());
@@ -33,7 +35,7 @@ public class UserController {
 
         private String username;
         private String password;
-        private String[] roles;
+        private String roles;
 
         public String getUsername() {
             return username;
@@ -51,11 +53,11 @@ public class UserController {
             this.password = password;
         }
 
-        public String[] getRoles() {
+        public String getRoles() {
             return roles;
         }
 
-        public void setRoles(String[] roles) {
+        public void setRoles(String roles) {
             this.roles = roles;
         }
 
@@ -70,25 +72,21 @@ public class UserController {
     public View create(Form form) throws IOException {
         AllUser user = new AllUser();
         user.setUsername(form.getUsername());
-        user.setPassword(form.getPassword());
-        //user.setPassword(passwordEncoder.encode(form.getPassword()));
-        for (String role : form.getRoles()) {
-            user.addRole(role);
-        }
+        user.setPassword(passwordEncoder.encode(form.getPassword()));
+        user.addRole(form.getRoles());
         userRepo.create(user);
-        return new RedirectView("/user/list", true);
+        return new RedirectView("/", true);
     }
 
     @RequestMapping(value = "edit/{username}", method = RequestMethod.GET)
     public ModelAndView edit(@PathVariable("username") String username, Principal principal) {
         AllUser user = userRepo.findByUsername(username);
-        if (user == null || !principal.getName().equals(user.getUsername())) {
+        if (user == null) {
             return new ModelAndView(new RedirectView("/user/list", true));
         }
 
         ModelAndView modelAndView = new ModelAndView("editUser");
         modelAndView.addObject("username", username);
-        //modelAndView.addObject("username", user);
 
         Form editForm = new Form();
         modelAndView.addObject("edituser", editForm);
@@ -96,21 +94,20 @@ public class UserController {
         return modelAndView;
     }
 
-
     @RequestMapping(value = "edit/{username}", method = RequestMethod.POST)
     public View edit(@PathVariable("username") String username, Form form, Principal principal)
             throws IOException {
         AllUser user = userRepo.findByUsername(username);
-        if (user == null || !principal.getName().equals(user.getUsername())) {
+        if (user == null) {
             return new RedirectView("/user/list", true);
         }
 
-        user.setPassword(form.getPassword());
-        //user.setPassword(passwordEncoder.encode(form.getPassword()));
-        for (String role : form.getRoles()) {
-            user.addRole(role);
+        user.setPassword(passwordEncoder.encode(form.getPassword()));
+
+        if (form.getRoles() != null) {
+            user.addRole(form.getRoles());
         }
-        userRepo.editUser(username);
+        userRepo.editUser(user);
         return new RedirectView("/user/list", true);
     }
 
