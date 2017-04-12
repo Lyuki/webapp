@@ -57,6 +57,7 @@ CREATE TABLE vote (
 INSERT INTO users(username, password) VALUES ('demo', 'demo');
 INSERT INTO user_roles(username, role) VALUES ('demo', 'ROLE_ADMIN');
 
+INSERT INTO poll(question,ans1,ans2,ans3,ans4) VALUES ('Select the fruit you like to eat', 'Apple', 'Orange', 'Lemon', 'Banana');
 
 /*INSERT INTO users VALUES (2,'keith', 'keithpw');
 INSERT INTO user_roles(user_id, role) VALUES (2, 'ROLE_USER');
