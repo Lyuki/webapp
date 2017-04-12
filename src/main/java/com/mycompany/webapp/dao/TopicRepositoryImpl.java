@@ -37,6 +37,18 @@ public class TopicRepositoryImpl implements TopicRepository {
             return topic;
         }
     }
+    
+    private static final class AttachRowMapper implements RowMapper<Attachment> {
+
+        @Override
+        public Attachment mapRow(ResultSet rs, int i) throws SQLException {
+            Attachment attach = new Attachment();
+            attach.setContents(rs.getBytes("content"));
+            attach.setMimeContentType(rs.getString("content_type"));
+            attach.setName(rs.getString("filename"));
+            return attach;
+        }
+    }
 
     private static final String SQL_INSERT_TOPIC
             = "insert into topic (title, msg, category, username) values (?, ?, ?, ?)";
@@ -112,16 +124,29 @@ public class TopicRepositoryImpl implements TopicRepository {
         }
         return topic;
     }
+    
+    private static final String SQL_SELECT_ATTACH_BYID
+            = "select * from attachment where topic_id = ? and filename = ?";
+
+    @Override
+    public Attachment findAttachByID(long id, String filename) {
+        Attachment attach = jdbcOp.queryForObject(SQL_SELECT_ATTACH_BYID,
+                new AttachRowMapper(),id, filename);
+        return attach;
+    }
 
     private static final String SQL_DELETE_TOPIC
             = "delete from topic where id = ?";
     private static final String SQL_DELETE_ATTACH
             = "delete from attachment where topic_id = ?";
+    private static final String SQL_DELETE_REPLY
+            = "delete from reply where topic_id = ?";
 
     @Override
     public void deleteByID(long id) {
         jdbcOp.update(SQL_DELETE_ATTACH, id);
         jdbcOp.update(SQL_DELETE_TOPIC, id);
+        jdbcOp.update(SQL_DELETE_REPLY, id);
     }
     
     private static final String SQL_UPDATE_TOPIC

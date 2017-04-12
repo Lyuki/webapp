@@ -13,7 +13,8 @@ import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
-public class ReplyRepositoryImpl implements ReplyRepository{
+public class ReplyRepositoryImpl implements ReplyRepository {
+
     private DataSource dataSource;
     private JdbcOperations jdbcOp;
 
@@ -36,6 +37,23 @@ public class ReplyRepositoryImpl implements ReplyRepository{
         }
     }
 
+    private static final class AttachRowMapper implements RowMapper<Attachment> {
+
+        @Override
+        public Attachment mapRow(ResultSet rs, int i) throws SQLException {
+            Attachment attach = new Attachment();
+            attach.setContents(rs.getBytes("content"));
+            attach.setMimeContentType(rs.getString("content_type"));
+            attach.setName(rs.getString("filename"));
+            return attach;
+        }
+
+        /*@Override
+         public Attachment mapRow(ResultSet rs, int i) throws SQLException {
+         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+         }*/
+    }
+
     private static final String SQL_INSERT_REPLY
             = "insert into reply (msg, topic_id, username) values (?, ?, ?)";
     private static final String SQL_INSERT_ATTACH
@@ -43,7 +61,7 @@ public class ReplyRepositoryImpl implements ReplyRepository{
 
     @Override
     public void create(Reply reply) {
-        jdbcOp.update(SQL_INSERT_REPLY,  
+        jdbcOp.update(SQL_INSERT_REPLY,
                 reply.getMsg(),
                 reply.getTopicId(),
                 reply.getCustomerName()
@@ -79,9 +97,9 @@ public class ReplyRepositoryImpl implements ReplyRepository{
             List<Map<String, Object>> roleRows = jdbcOp.queryForList(SQL_SELECT_ATTACH, tid);
             for (Map<String, Object> roleRow : roleRows) {
                 Attachment attach = new Attachment();
-                attach.setContents((byte[])roleRow.get("content"));
-                attach.setMimeContentType((String)roleRow.get("content_type"));
-                attach.setName((String)roleRow.get("filename"));
+                attach.setContents((byte[]) roleRow.get("content"));
+                attach.setMimeContentType((String) roleRow.get("content_type"));
+                attach.setName((String) roleRow.get("filename"));
                 reply.addAttachment(attach);
             }
             replys.add(reply);
@@ -101,27 +119,21 @@ public class ReplyRepositoryImpl implements ReplyRepository{
 
         for (Map<String, Object> row : rows) {
             Attachment attach = new Attachment();
-                attach.setContents((byte[])row.get("content"));
-                attach.setMimeContentType((String)row.get("content_type"));
-                attach.setName((String)row.get("filename"));
-                reply.addAttachment(attach);
+            attach.setContents((byte[]) row.get("content"));
+            attach.setMimeContentType((String) row.get("content_type"));
+            attach.setName((String) row.get("filename"));
+            reply.addAttachment(attach);
         }
         return reply;
     }
-    
+
     private static final String SQL_SELECT_ATTACH_BYID
             = "select * from attachment where reply_id = ? and filename = ?";
 
     @Override
     public Attachment findAttachByID(long id, String filename) {
-        List<Map<String, Object>> rows = jdbcOp.queryForList(SQL_SELECT_ATTACH_BYID,
-                id,filename);
-        Attachment attach = new Attachment();
-        for (Map<String, Object> row : rows) {        
-                attach.setContents((byte[])row.get("content"));
-                attach.setMimeContentType((String)row.get("content_type"));
-                attach.setName((String)row.get("filename"));           
-        }
+        Attachment attach = jdbcOp.queryForObject(SQL_SELECT_ATTACH_BYID,
+                new AttachRowMapper(),id, filename);
         return attach;
     }
 
@@ -135,12 +147,12 @@ public class ReplyRepositoryImpl implements ReplyRepository{
         jdbcOp.update(SQL_DELETE_ATTACH, id);
         jdbcOp.update(SQL_DELETE_REPLY, id);
     }
-    
+
     private static final String SQL_UPDATE_REPLY
             = "update reply set msg = ? , topic_id = ?, username = ? where id = ?";
     private static final String SQL_UPDATE_ATTACH
             = "update attachment set username = ?, filename = ?, content_type = ?, content = ? where reply_id = ?";
-    
+
     @Override
     public void editByID(Reply reply) {
         jdbcOp.update(SQL_UPDATE_REPLY,
@@ -157,7 +169,7 @@ public class ReplyRepositoryImpl implements ReplyRepository{
                     attach.getMimeContentType(),
                     attach.getContents(),
                     reply.getId()
-                    );
+            );
         }
     }
 }
