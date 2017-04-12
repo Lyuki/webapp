@@ -7,6 +7,7 @@ import com.mycompany.webapp.model.Vote;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.Map;
+import javax.servlet.ServletContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,14 +25,24 @@ public class IndexController {
     Poll poll = new Poll();
     @Autowired
     VoteRepository voteRepo;
+    @Autowired
+    private ServletContext sCtx;
     
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    public ModelAndView index() {
+    public ModelAndView index(Principal principal) {
         ModelAndView modelAndView = new ModelAndView("index");
-        modelAndView.addObject("poll", pollRepo.findAll());
-
+        poll = pollRepo.findByPollID();
+        modelAndView.addObject("poll", poll);
+        if (principal != null) {
+            modelAndView.addObject("vote", voteRepo.findByPollID(poll.getId(), principal.getName()));
+        }
+        
         VoteForm voteForm = new VoteForm();
         modelAndView.addObject("VoteForm", voteForm);
+        if  (sCtx.getAttribute("langauge") == null) {
+            sCtx.setAttribute("language", "English");
+        }
+        modelAndView.addObject("language",sCtx.getAttribute("langauge"));
 
         return modelAndView;
     }
