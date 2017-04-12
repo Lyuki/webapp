@@ -28,7 +28,7 @@ public class PollRepositoryImpl implements PollRepository{
         @Override
         public Poll mapRow(ResultSet rs, int i) throws SQLException {
             Poll poll = new Poll();
-            //topic.setId(rs.getLong("id"));
+            poll.setId(rs.getLong("id"));
             poll.setQuestion(rs.getString("question"));
             poll.setAns1(rs.getString("ans1"));
             poll.setAns2(rs.getString("ans2"));
@@ -81,6 +81,16 @@ public class PollRepositoryImpl implements PollRepository{
         public Poll findByID(long id) {
             Poll poll = jdbcOp.queryForObject(SQL_SELECT_POLL,
                     new PollRowMapper(), id);
+            return poll;
+        }
+        
+        private static final String SQL_SELECT_POLL_BYID
+            = "select * from poll where id = (select MAX(ID) from poll)";
+        
+        @Override
+        public Poll findByPollID() {
+            Poll poll = jdbcOp.queryForObject(SQL_SELECT_POLL_BYID,
+                    new PollRowMapper());
             return poll;
         }
     }
