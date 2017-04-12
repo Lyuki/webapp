@@ -47,11 +47,9 @@ public class UserRepositoryImpl implements UserRepository {
                 user.getUsername(),
                 user.getPassword());
 
-        for (String role : user.getRoles()) {
-            jdbcOp.update(SQL_INSERT_ROLE,
-                    user.getUsername(),
-                    role);
-        }
+        jdbcOp.update(SQL_INSERT_ROLE,
+                user.getUsername(),
+                user.getRoles());
     }
 
     private static final String SQL_SELECT_ALL_USER
@@ -78,7 +76,7 @@ public class UserRepositoryImpl implements UserRepository {
         return users;
     }
 
-   private static final String SQL_SELECT_USER
+    private static final String SQL_SELECT_USER
             = "select username, password from users where username = ?";
 
     @Override
@@ -91,24 +89,25 @@ public class UserRepositoryImpl implements UserRepository {
         return ticketUser;
     }
 
-    private static final String SQL_EDIT_USER
-            = "update users set password = ? where username = ?";
     private static final String SQL_EDIT_ROLE
             = "update user_roles set role = ? where username = ?";
- 
-    @Override
-    public void editUser(String username) {
-        AllUser user = new AllUser();
-        jdbcOp.update(SQL_EDIT_USER,
-                user.getPassword(),
-                username);
+    private static final String SQL_EDIT_USER
+            = "update users set password = ? where username = ?";
+    private static final String SQL_SELECT_ROLES_ONLY
+            = "select role from user_roles where username = ?";
 
-        for (String role : user.getRoles()) {
-            jdbcOp.update(SQL_EDIT_ROLE,
-                    role,
-                    username);
+    @Override
+    public void editUser(AllUser editUser) {
+        if (!editUser.getPassword().equals("")) {
+            jdbcOp.update(SQL_EDIT_USER,
+                    editUser.getPassword(),
+                    editUser.getUsername());
         }
-            
+        if (!editUser.getRoles().equals("")) {
+            jdbcOp.update(SQL_EDIT_ROLE, editUser.getRoles(), editUser.getUsername());
+        } else {
+            jdbcOp.update(SQL_EDIT_ROLE, SQL_SELECT_ROLES_ONLY, editUser.getUsername());
+        }
     }
 
     private static final String SQL_DELETE_USER
