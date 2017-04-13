@@ -28,9 +28,14 @@
                 <form:input type="text" path="username" /><br/><br/>
                 <form:label path="password">Password</form:label><br/>
                 <form:input type="password" path="password" /><br/><br/>
+                <security:authorize access="isAnonymous()">
+                    <form:hidden path="roles" value="ROLE_USER" checked="checked"/>  
+                </security:authorize>
+                <security:authorize access="hasRole('ADMIN')">
                 <form:label path="roles">Roles</form:label><br/>
                 <form:radiobutton path="roles" value="ROLE_USER" />ROLE_USER
                 <form:radiobutton path="roles" value="ROLE_ADMIN" />ROLE_ADMIN
+                    </security:authorize>
                 <br /><br />
 
                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -44,9 +49,14 @@
                 <form:input type="text" path="username" /><br/><br/>
                 <form:label path="password">密碼</form:label><br/>
                 <form:input type="password" path="password" /><br/><br/>
+                <security:authorize access="isAnonymous()">
+                    <form:hidden path="roles" value="ROLE_USER" checked="checked"/>  
+                </security:authorize>
+                <security:authorize access="hasRole('ADMIN')">
                 <form:label path="roles">角色</form:label><br/>
                 <form:radiobutton path="roles" value="ROLE_USER" />用戶
                 <form:radiobutton path="roles" value="ROLE_ADMIN" />管理員
+                    </security:authorize>
                 <br /><br />
 
                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
